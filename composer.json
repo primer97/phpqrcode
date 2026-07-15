@@ -1,7 +1,7 @@
 {
   "name": "primer/phpqrcode",
-  "version": "1.0.0",
-  "description": "This is a modern implementaion of QR code 2-D barcode generator. pure-php LGPL implementation based on https://phpqrcode.sourceforge.net, itself based on C libqrencode by Kentaro Fukuchi.",
+  "version": "1.2.0",
+  "description": "A modern implementaion of QR code 2D barcode generator. Pure-php LGPL implementation based on https://phpqrcode.sourceforge.net, itself based on C libqrencode by Kentaro Fukuchi.",
   "minimum-stability": "stable",
   "type": "library",
   "homepage": "https://github.com/primer97/phpqrcode",
@@ -18,12 +18,13 @@
     },
     {
       "name": "Fabien",
-      "email": "hpfx at free dot fr",
+      "email": "hpfx@free.fr",
       "homepage": "https://github.com/primer97"
     }
   ],
   "require": {
-    "php": ">=8.0"
+    "php": ">=8.0",
+    "ext-gd": "*"
   },
   "autoload": {
     "psr-4": {
