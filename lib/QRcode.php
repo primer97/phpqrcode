@@ -149,6 +149,16 @@ class QRcode
     }
     
     //----------------------------------------------------------------------
+    
+    /**
+     * @param string      $text    Text data to encode
+     * @param string|bool $outfile Png file to create, false when saveandprint=true
+     * @param int         $level   Correction level {@see QRConstants::QR_ECLEVEL_L}, {@see QRConstants::QR_ECLEVEL_M}, {@see QRConstants::QR_ECLEVEL_Q}, {@see QRConstants::QR_ECLEVEL_H}
+     * @param int         $size    Pixel size
+     * @param int         $margin  Margin (silent zone)
+     * @param bool        $saveandprint Png to be sent to browser.
+     * @return null
+     */
     public static function png($text, $outfile = false, $level = QRConstants::QR_ECLEVEL_L, $size = 3, $margin = 4, $saveandprint = false)
     {
         $enc = QRencode::factory($level, $size, $margin);
