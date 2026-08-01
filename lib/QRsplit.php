@@ -34,6 +34,8 @@
 namespace primer\phpqrcode;
 
 
+use Exception;
+
 class QRsplit
 {
     
