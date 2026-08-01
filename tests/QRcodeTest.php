@@ -3,6 +3,7 @@
 namespace primer\phpqrcode;
 
 use PHPUnit\Framework\TestCase;
+use Zxing\QrReader;
 
 class QRcodeTest extends TestCase
 {
@@ -21,7 +22,7 @@ class QRcodeTest extends TestCase
         $in="123456";
         QRcode::png($in,$file,QRConstants::QR_ECLEVEL_L);
         $this->assertTrue(file_exists($file));
-        $reader = new \Zxing\QrReader($file);
+        $reader = new QrReader($file);
         $out=$reader->text();
         $this->assertSame($in,$out);
     }
@@ -32,7 +33,7 @@ class QRcodeTest extends TestCase
         $in=" &aA|\\%/*-+.,^'#~?!<>[]`\n\r\"\t{}@;:§¤°é$";
         QRcode::png($in,$file,QRConstants::QR_ECLEVEL_L);
         $this->assertTrue(file_exists($file));
-        $reader = new \Zxing\QrReader($file);
+        $reader = new QrReader($file);
         $out=$reader->text();
         $this->assertSame($in,$out);
     }
@@ -43,7 +44,7 @@ class QRcodeTest extends TestCase
         $in="★→⚡✅";
         QRcode::png($in,$file,QRConstants::QR_ECLEVEL_L);
         $this->assertTrue(file_exists($file));
-        $reader = new \Zxing\QrReader($file);
+        $reader = new QrReader($file);
         $out=$reader->text();
         $this->assertSame($in,$out);
     }
