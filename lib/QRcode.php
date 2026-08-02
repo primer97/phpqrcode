@@ -25,8 +25,6 @@ class QRcode
         
         $raw = new QRrawcode($input);
         
-        QRtools::markTime('after_raw');
-        
         $version = $raw->version;
         $width   = QRspec::getWidth($version);
         $frame   = QRspec::newFrame($version);
@@ -49,8 +47,6 @@ class QRcode
                 $bit = $bit >> 1;
             }
         }
-        
-        QRtools::markTime('after_filler');
         
         unset($raw);
         
@@ -89,8 +85,6 @@ class QRcode
         {
             return null;
         }
-        
-        QRtools::markTime('after_mask');
         
         $this->version = $version;
         $this->width   = $width;

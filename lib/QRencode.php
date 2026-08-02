@@ -112,8 +112,6 @@ class QRencode
             $code->encodeString($intext, $this->version, $this->level, $this->hint, $this->casesensitive);
         }
         
-        QRtools::markTime('after_encode');
-        
         if($outfile !== false)
         {
             file_put_contents($outfile, join("\n", QRtools::binarize($code->data)));

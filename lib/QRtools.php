@@ -88,8 +88,6 @@ class QRtools
     //----------------------------------------------------------------------
     public static function buildCache()
     {
-        QRtools::markTime('before_build_cache');
-        
         $mask = new QRmask();
         for($a = 1; $a <= QRConstants::QRSPEC_VERSION_MAX; $a++)
         {
@@ -106,7 +104,6 @@ class QRtools
                 $mask->makeMaskNo($maskNo, $width, $frame, $bitMask, true);
         }
         
-        QRtools::markTime('after_build_cache');
     }
     
     //----------------------------------------------------------------------
@@ -141,55 +138,4 @@ class QRtools
         }
     }
     
-    //----------------------------------------------------------------------
-    public static function markTime($markerId)
-    {
-        [$usec, $sec] = explode(" ", microtime());
-        $time = ((float)$usec + (float)$sec);
-        
-        if(!isset($GLOBALS['qr_time_bench']))
-            $GLOBALS['qr_time_bench'] = [];
-        
-        $GLOBALS['qr_time_bench'][$markerId] = $time;
-    }
-    
-    //----------------------------------------------------------------------
-    public static function timeBenchmark()
-    {
-        self::markTime('finish');
-        
-        $lastTime  = 0;
-        $startTime = 0;
-        $p         = 0;
-        
-        echo '<table cellpadding="3" cellspacing="1">
-                    <thead><tr style="border-bottom:1px solid silver"><td colspan="2" style="text-align:center">BENCHMARK</td></tr></thead>
-                    <tbody>';
-        
-        foreach($GLOBALS['qr_time_bench'] as $markerId => $thisTime)
-        {
-            if($p > 0)
-            {
-                echo '<tr><th style="text-align:right">till '.$markerId.': </th><td>'.number_format($thisTime - $lastTime, 6).'s</td></tr>';
-            }
-            else
-            {
-                $startTime = $thisTime;
-            }
-            
-            $p++;
-            $lastTime = $thisTime;
-        }
-        
-        echo '</tbody><tfoot>
-                <tr style="border-top:2px solid black"><th style="text-align:right">TOTAL: </th><td>'.number_format($lastTime - $startTime, 6).'s</td></tr>
-            </tfoot>
-            </table>';
-    }
-    
 }
-
-//##########################################################################
-
-QRtools::markTime('start');
-    
