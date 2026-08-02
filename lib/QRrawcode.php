@@ -40,7 +40,6 @@ class QRrawcode
         if($ret < 0)
         {
             throw new Exception('block alloc error');
-            return null;
         }
         
         $this->count = 0;

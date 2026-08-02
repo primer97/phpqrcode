@@ -19,7 +19,6 @@ class QRinput
         if($version < 0 || $version > QRConstants::QRSPEC_VERSION_MAX || $level > QRConstants::QR_ECLEVEL_H)
         {
             throw new Exception('Invalid version no');
-            return null;
         }
         
         $this->version = $version;
@@ -38,7 +37,6 @@ class QRinput
         if($version < 0 || $version > QRConstants::QRSPEC_VERSION_MAX)
         {
             throw new Exception('Invalid version no');
-            return -1;
         }
         
         $this->version = $version;
@@ -58,7 +56,6 @@ class QRinput
         if($level > QRConstants::QR_ECLEVEL_H)
         {
             throw new Exception('Invalid ECLEVEL');
-            return -1;
         }
         
         $this->level = $level;
@@ -397,7 +394,6 @@ class QRinput
             if($ver < 0)
             {
                 throw new Exception('WRONG VERSION');
-                return -1;
             }
             else if($ver > $this->getVersion())
             {

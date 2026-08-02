@@ -52,7 +52,6 @@ class QRinputItem
         if(!QRinput::check($mode, $size, $setData))
         {
             throw new Exception('Error m:'.$mode.',s:'.$size.',d:'.join(',', $setData));
-            return null;
         }
         
         $this->mode    = $mode;

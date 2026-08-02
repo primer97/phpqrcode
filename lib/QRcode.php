@@ -105,7 +105,6 @@ class QRcode
         if($string == null)
         {
             throw new Exception('empty string!');
-            return null;
         }
         
         $input = new QRinput($version, $level);
@@ -127,7 +126,6 @@ class QRcode
         if($hint != QRConstants::QR_MODE_8 && $hint != QRConstants::QR_MODE_KANJI)
         {
             throw new Exception('bad hint');
-            return null;
         }
         
         $input = new QRinput($version, $level);
