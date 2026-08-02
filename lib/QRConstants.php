@@ -11,7 +11,6 @@ class QRConstants
 {
     public const QR_CACHEABLE = false; // cache activated
     public const QR_CACHE_DIR = ''; // dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR;
-    public const QR_LOG_DIR   = null; // /tmp/qrcode_log/ or null for default errorlog
     
     public const QR_FIND_BEST_MASK   = true; // if true, estimates best mask (spec. default, but extremally slow; set to false to significant performance boost but (propably) worst quality code
     public const QR_FIND_FROM_RANDOM = false; // if false, checks all masks available, otherwise value tells count of masks need to be checked, mask id are got randomly
