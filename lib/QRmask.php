@@ -376,7 +376,7 @@ class QRmask
         if(QRConstants::QR_FIND_FROM_RANDOM !== false)
         {
             
-            $howManuOut = 8 - (QRConstants::QR_FIND_FROM_RANDOM%9);
+            $howManuOut = 8 - (QRConstants::QR_FIND_COUNT_MASK%9);
             for($i = 0; $i < $howManuOut; $i++)
             {
                 $remPos = rand(0, count($checked_masks) - 1);
