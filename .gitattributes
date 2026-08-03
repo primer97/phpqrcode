@@ -1,0 +1,9 @@
+
+# Do not include in package
+
+/.gitattribute  export-ignore
+/tests/         export-ignore
+/phpstan.neom   export-ignore
+#/.github        export-ignore
+#/.gitignore     export-ignore
+
