@@ -29,7 +29,7 @@ class QRtools
 {
     
     //----------------------------------------------------------------------
-    protected static array $frames=[];
+    protected static /*array*/ $frames=[]; //todo enable at php7.4+
     
     public static function binarize($frame)
     {
