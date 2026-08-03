@@ -1,4 +1,11 @@
-* 1.2.0
+* 1.2.1 build 2026-08-03
+  - remove benchmark and log
+  - fix php7.3
+  - cleanup code (dead code)
+  - tested toward phpstan
+
+
+* 1.2.0 build 2026-08-02
    New version - Work in progress.
    - refactoring classes
 

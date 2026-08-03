@@ -9,14 +9,6 @@
   "license": "LGPL-2.1-or-later",
   "authors": [
     {
-      "name": "Kentaro Fukuchi",
-      "email": "kentaro@megaui.net"
-    },
-    {
-      "name": "Dominik Dzienia",
-      "email": "deltalab@poczta.fm"
-    },
-    {
       "name": "Fabien",
       "email": "hpfx@free.fr",
       "homepage": "https://github.com/primer97"

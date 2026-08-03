@@ -1,7 +1,8 @@
 # phpqrcode
-PHP QRCode Generator Library
+PHP QRCode Generator Library for php 7.3 and later.
 
-Dependency : php 7.3 and later.
+A modern implementaion of QR code 2D barcode generator. 
+Pure-php LGPL implementation based on inital phpqrcode, itself based on C libqrencode.
 
 ## Installation
 
@@ -46,4 +47,10 @@ QRcode::png($text, $outfile ,
 ### Margin
 (int) Raw silent zone (margin zone = raw * size)
 ### Save and Print
-Use saveAndPrint (bool) option to send to the browser both http header and image content.
+(bool) Use saveAndPrint (bool) option to send to the browser both http header and image content.
+
+
+## Credits
+- Kentaro Fukuchi: for inital libqrencode C Lib (kentaro@megaui.net)
+- Dominik Dzienia: for https://phpqrcode.sourceforge.net (deltalab@poczta.fm)
+ 
