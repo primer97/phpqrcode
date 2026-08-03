@@ -255,16 +255,12 @@ class QRinput
         {
             case QRConstants::QR_MODE_NUM:
                 return self::checkModeNum($size, $data);
-                break;
             case QRConstants::QR_MODE_AN:
                 return self::checkModeAn($size, $data);
-                break;
             case QRConstants::QR_MODE_KANJI:
                 return self::checkModeKanji($size, $data);
-                break;
             case QRConstants::QR_MODE_8:
                 return true;
-                break;
             case QRConstants::QR_MODE_STRUCTURE:
                 return true;
                 break;
