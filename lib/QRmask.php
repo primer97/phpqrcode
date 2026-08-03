@@ -201,7 +201,7 @@ class QRmask
             }
             else
             {
-                $bitMask = $this->generateMaskNo($maskNo, $width, $s, $d);
+                $bitMask = $this->generateMaskNo($maskNo, $width, $s);
                 if(!file_exists(QRConstants::QR_CACHE_DIR.'mask_'.$maskNo))
                     mkdir(QRConstants::QR_CACHE_DIR.'mask_'.$maskNo);
                 file_put_contents($fileName, self::serial($bitMask));
@@ -209,7 +209,7 @@ class QRmask
         }
         else
         {
-            $bitMask = $this->generateMaskNo($maskNo, $width, $s, $d);
+            $bitMask = $this->generateMaskNo($maskNo, $width, $s);
         }
         
         if($maskGenOnly)

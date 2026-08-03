@@ -332,7 +332,7 @@ class QRsplit
         
         while($p < $stringLen)
         {
-            $mode = self::identifyMode(substr($this->dataStr, $p), $this->modeHint);
+            $mode = self::identifyMode(substr($this->dataStr, $p));
             if($mode == QRConstants::QR_MODE_KANJI)
             {
                 $p += 2;
