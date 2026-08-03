@@ -107,7 +107,7 @@ class QRtools
     }
     
     //----------------------------------------------------------------------
-    public static function log($outfile, $err)
+    public static function log(?string $outfile, $err)
     {
         // error handler - for later, allow user callback
     }

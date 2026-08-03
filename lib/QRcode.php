@@ -143,18 +143,18 @@ class QRcode
     //----------------------------------------------------------------------
     
     /**
-     * @param string      $text    Text data to encode
-     * @param string|bool $outfile Png file to create, false when saveandprint=true
-     * @param int         $level   Correction level {@see QRConstants::QR_ECLEVEL_L}, {@see QRConstants::QR_ECLEVEL_M}, {@see QRConstants::QR_ECLEVEL_Q}, {@see QRConstants::QR_ECLEVEL_H}
-     * @param int         $size    Pixel size
-     * @param int         $margin  Margin (silent zone)
-     * @param bool        $saveandprint Png to be sent to browser.
-     * @return null
+     * @param string  $text          Text data to encode
+     * @param ?string $outfile       Png file to create, (can be null when false when sendToBrowser==true)
+     * @param int     $level         Correction level {@see QRConstants::QR_ECLEVEL_L}, {@see QRConstants::QR_ECLEVEL_M}, {@see QRConstants::QR_ECLEVEL_Q}, {@see QRConstants::QR_ECLEVEL_H}
+     * @param int     $size          Pixel size
+     * @param int     $margin        Margin (silent zone)
+     * @param bool    $sendToBrowser Png to be sent to browser.
+     * @return void
      */
-    public static function png($text, $outfile = false, $level = QRConstants::QR_ECLEVEL_L, $size = 3, $margin = 4, $saveandprint = false)
+    public static function png(string $text, ?string $outfile = null, int $level = QRConstants::QR_ECLEVEL_L, int $size = 3, int $margin = 4, bool $sendToBrowser = false):void
     {
         $enc = QRencode::factory($level, $size, $margin);
-        return $enc->encodePNG($text, $outfile, $saveandprint = false);
+        $enc->encodePNG($text, $outfile, $sendToBrowser);
     }
     
     //----------------------------------------------------------------------

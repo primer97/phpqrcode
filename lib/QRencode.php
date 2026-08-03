@@ -123,7 +123,7 @@ class QRencode
     }
     
     //----------------------------------------------------------------------
-    public function encodePNG($intext, $outfile = false, $saveandprint = false)
+    public function encodePNG($intext, ?string $outfile = null, $sendToBrowser = false)
     {
         try
         {
@@ -138,7 +138,7 @@ class QRencode
             
             $maxSize = (int)(QRConstants::QR_PNG_MAXIMUM_SIZE/(count($tab) + 2*$this->margin));
             
-            QRimage::png($tab, $outfile, min(max(1, $this->size), $maxSize), $this->margin, $saveandprint);
+            QRimage::png($tab, $outfile, min(max(1, $this->size), $maxSize), $this->margin, $sendToBrowser);
             
         } catch(Exception $e)
         {
