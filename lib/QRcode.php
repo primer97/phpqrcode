@@ -67,13 +67,13 @@ class QRcode
         if($mask < 0)
         {
             
-            if(QRConstants::QR_FIND_BEST_MASK)
+            if(QRSettings::$FindBestMask)
             {
                 $masked = $maskObj->mask($width, $frame, $input->getErrorCorrectionLevel());
             }
             else
             {
-                $masked = $maskObj->makeMask($width, $frame, (intval(QRConstants::QR_DEFAULT_MASK)%8), $input->getErrorCorrectionLevel());
+                $masked = $maskObj->makeMask($width, $frame, (intval(QRSettings::$DefaultMask)%8), $input->getErrorCorrectionLevel());
             }
         }
         else

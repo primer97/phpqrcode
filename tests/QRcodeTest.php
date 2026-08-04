@@ -10,6 +10,10 @@ class QRcodeTest extends TestCase
 {
     use PHPMock;
     
+    public function setup(): void
+    {
+        QRSettings::default();
+    }
     public function testPng()
     {
         $file=__DIR__."/out/qr1.png";
@@ -73,4 +77,20 @@ class QRcodeTest extends TestCase
         $this->assertSame($in,$out);
     }
 //endregion check QR content
+    
+    public function testPngDefaultMask()
+    {
+        $file=__DIR__."/out/qr5.png";
+        QRSettings::setDefaultMask(1);
+        QRcode::png("123456",$file);
+        $this->assertTrue(file_exists($file));
+    }
+    public function testPngBestCount()
+    {
+        $file=__DIR__."/out/qr6.png";
+        QRSettings::setFindBestMask(3);
+        QRcode::png("123456",$file);
+        $this->assertTrue(file_exists($file));
+    }
+
 }
