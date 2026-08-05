@@ -49,6 +49,25 @@ QRcode::png($text, $outfile ,
 ### Save and Print
 (bool) Use saveAndPrint (bool) option to send to the browser both http header and image content.
 
+## Settings
+
+This package automatically determines the best mode, but user can force to one of these modes :
+- `QRConstants::QR_MODE_NUM` : Force Numeric Mode
+- `QRConstants::QR_MODE_AN` : Force Alpha-Numeric Mode
+- `QRConstants::QR_MODE_8` : Force BYTE8 Mode (utf8)
+- `QRConstants::QR_MODE_KANJI` : Force Kanji Mode (Shift-JIS)
+
+Exemple :
+```php
+QRSettings::forceMode(QRConstants::QR_MODE_8);
+```
+
+
+For experts, 
+user can also manipulate mask options,
+see `QRSettings::setDefaultMask(...);` and `QRSettings::setFindBestMask(...);`
+
+
 
 ## Credits
 - Kentaro Fukuchi: for inital libqrencode C Lib (kentaro@megaui.net)
