@@ -10,12 +10,13 @@ namespace primer\phpqrcode;
 class QRSettings
 {
     /**
-     * Reset to default settings : {@see QRSettings::setFindBestMask() Best Mask}
+     * Reset to default settings : {@see QRSettings::setFindBestMask() Best Mask}, {@see QRSettings::forceMode() auto-mode}
      * @return void
      */
-    public static function default()
+    public static function default():void
     {
         static::setFindBestMask();
+        static::forceMode(-1);
     }
     
 //region mask settings
@@ -60,5 +61,30 @@ class QRSettings
         static::$DefaultMask = $mask % 8;
     }
 //endregion mask settings
-
+    
+    /**
+     * Forced mode :
+     * * {@see QRConstants::QR_MODE_NUM} : Force Numeric Mode
+     * * {@see QRConstants::QR_MODE_AN} : Force Alpha-Numeric Mode
+     * * {@see QRConstants::QR_MODE_8} : Force BYTE8 Mode (utf8)
+     * * {@see QRConstants::QR_MODE_KANJI} : Force Kanji Mode (Shift-JIS)
+     * @param int $mode -1:automatic, otherwise:force one of these mode.
+     * @return void
+     */
+    public static function forceMode(int $mode):void
+    {
+        static::$forcedMode=$mode;
+    }
+//region mode
+    protected static $forcedMode = -1;
+    public static function isForcedMode():bool
+    {
+        return  static::$forcedMode !== -1;
+    }
+    
+    public static function getForcedMode():int
+    {
+        return  static::$forcedMode;
+    }
+//endregion mode
 }

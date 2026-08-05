@@ -119,8 +119,16 @@ class QRcode
         return $this->encodeInput($input);
     }
     
-    //----------------------------------------------------------------------
-    public function encodeString($string, $version, $level, $hint, $casesensitive)
+    /**
+     * @param $string
+     * @param int $version
+     * @param int $level
+     * @param int $hint
+     * @param bool $casesensitive
+     * @return $this|null
+     * @throws Exception
+     */
+    public function encodeString($string, int $version, int $level, int $hint, bool $casesensitive)
     {
         
         if($hint != QRConstants::QR_MODE_8 && $hint != QRConstants::QR_MODE_KANJI)

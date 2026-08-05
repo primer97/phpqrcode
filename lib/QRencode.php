@@ -34,18 +34,21 @@ class QRencode
 {
     
     public $casesensitive = true;
-    public $eightbit      = false;
     
     public $version = 0;
     public $size    = 3;
     public $margin  = 4;
     
-    public $structured = 0; // not supported yet
-    
     /** @var int $level error correction level 0 to 3 */
     public $level = QRConstants::QR_ECLEVEL_L;
     public $hint  = QRConstants::QR_MODE_8;
     
+    protected function isEightBit():bool
+    {
+        return QRSettings::isForcedMode() &&
+            ( QRSettings::getForcedMode() == QRConstants::QR_MODE_8
+              || QRSettings::getForcedMode() == QRConstants::QR_MODE_KANJI);
+    }
     
     /**
      * @param int $level Error correction level
@@ -80,7 +83,7 @@ class QRencode
     {
         $code = new QRcode();
         
-        if($this->eightbit)
+        if($this->isEightBit())
         {
             $code->encodeString8bit($intext, $this->version, $this->level);
         }
@@ -102,7 +105,7 @@ class QRencode
     {
         $code = new QRcode();
         
-        if($this->eightbit)
+        if($this->isEightBit())
         {
             $code->encodeString8bit($intext, $this->version, $this->level);
         }

@@ -80,6 +80,9 @@ class QRsplit
         
         $c = $this->dataStr[$pos];
         
+        if(QRSettings::isForcedMode())
+            return QRSettings::getForcedMode();
+            
         if(self::isdigitat($this->dataStr, $pos))
         {
             return QRConstants::QR_MODE_NUM;

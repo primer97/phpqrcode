@@ -66,10 +66,43 @@ class QRcodeTest extends TestCase
         $this->assertSame($in,$out);
     }
     
-    public function testEncodeAndReReadUtf8()
+    public function testEncodeAndReReadUtf8_Auto()
     {
         $file=__DIR__."/out/qr4.png";
         $in="★→⚡✅";
+        QRcode::png($in,$file,QRConstants::QR_ECLEVEL_L);
+        $this->assertTrue(file_exists($file));
+        $reader = new QrReader($file);
+        $out=$reader->text();
+        $this->assertSame($in,$out);
+    }
+    public function testEncodeAndReReadUtf8_Forced()
+    {
+        $file=__DIR__."/out/qr4.png";
+        $in="★→⚡✅";
+        QRSettings::forceMode(QRConstants::QR_MODE_8);
+        QRcode::png($in,$file,QRConstants::QR_ECLEVEL_L);
+        $this->assertTrue(file_exists($file));
+        $reader = new QrReader($file);
+        $out=$reader->text();
+        $this->assertSame($in,$out);
+    }
+    
+    public function testEncodeAndReReadKanji_Auto()
+    {
+        $file=__DIR__."/out/qr9.png";
+        $in="漢字体";
+        QRcode::png($in,$file,QRConstants::QR_ECLEVEL_L);
+        $this->assertTrue(file_exists($file));
+        $reader = new QrReader($file);
+        $out=$reader->text();
+        $this->assertSame($in,$out);
+    }
+    public function testEncodeAndReReadKanji_Forced()
+    {
+        $file=__DIR__."/out/qr9.png";
+        $in="漢字体";
+        QRSettings::forceMode(QRConstants::QR_MODE_KANJI);
         QRcode::png($in,$file,QRConstants::QR_ECLEVEL_L);
         $this->assertTrue(file_exists($file));
         $reader = new QrReader($file);
