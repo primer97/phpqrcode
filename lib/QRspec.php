@@ -36,8 +36,8 @@ namespace primer\phpqrcode;
 
 class QRspec
 {
-
-    public static $capacity = [
+ /** @var array<array{0:int, 1:int, 2:int, 3:array{0:int, 1:int, 2:int, 3:int} }> $capacity [version⇒[width, word, reminder, ec⇒[level0, level1, level2, level3]] */
+    protected static $capacity = [
             [0, 0, 0, [0, 0, 0, 0]],
             [21, 26, 0, [7, 10, 13, 17]], // 1
             [25, 44, 7, [10, 16, 22, 28]],
@@ -82,31 +82,31 @@ class QRspec
     ];
 
     //----------------------------------------------------------------------
-    public static function getDataLength($version, $level)
+    public static function getDataLength(int $version, int $level):int
     {
         return self::$capacity[$version][QRConstants::QRCAP_WORDS] - self::$capacity[$version][QRConstants::QRCAP_EC][$level];
     }
 
     //----------------------------------------------------------------------
-    public static function getECCLength($version, $level)
+    public static function getECCLength(int $version, int $level):int
     {
         return self::$capacity[$version][QRConstants::QRCAP_EC][$level];
     }
 
     //----------------------------------------------------------------------
-    public static function getWidth($version)
+    public static function getWidth(int $version):int
     {
         return self::$capacity[$version][QRConstants::QRCAP_WIDTH];
     }
 
     //----------------------------------------------------------------------
-    public static function getRemainder($version)
+    public static function getRemainder(int $version):int
     {
         return self::$capacity[$version][QRConstants::QRCAP_REMINDER];
     }
 
     //----------------------------------------------------------------------
-    public static function getMinimumVersion($size, $level)
+    public static function getMinimumVersion(int $size, int $level):int
     {
 
         for($i = 1; $i <= QRConstants::QRSPEC_VERSION_MAX; $i++)
@@ -121,7 +121,10 @@ class QRspec
 
     //######################################################################
 
-    public static $lengthTableBits = [
+    /**
+     * @var array<array{0:int, 1:int, 2:int}> $lengthTableBits [mode⇒[ lengths ]]
+     */
+    protected static $lengthTableBits = [
             [10, 12, 14],
             [9, 11, 13],
             [8, 16, 16],
@@ -129,7 +132,7 @@ class QRspec
     ];
 
     //----------------------------------------------------------------------
-    public static function lengthIndicator($mode, $version)
+    public static function lengthIndicator(int $mode,int $version):int
     {
         if($mode == QRConstants::QR_MODE_STRUCTURE)
             return 0;
@@ -151,7 +154,7 @@ class QRspec
     }
 
     //----------------------------------------------------------------------
-    public static function maximumWords($mode, $version)
+    public static function maximumWords(int $mode, int $version):int
     {
         if($mode == QRConstants::QR_MODE_STRUCTURE)
             return 3;
@@ -183,8 +186,8 @@ class QRspec
     // Error correction code -----------------------------------------------
     // Table of the error correction code (Reed-Solomon block)
     // See Table 12-16 (pp.30-36), JIS X0510:2004.
-
-    public static $eccTable = [
+/** @var array<array{0:array{int,int}, 1:array{int,int}, 2:array{int,int}, 3:array{int,int}}> $eccTable [version⇒[level⇒[par1, par2]] : Error correction code table (Reed-Solomon block) - See Table 12-16 (pp.30-36), JIS X0510:2004. */
+    protected static $eccTable = [
             [[0, 0], [0, 0], [0, 0], [0, 0]],
             [[1, 0], [1, 0], [1, 0], [1, 0]], // 1
             [[1, 0], [1, 0], [1, 0], [1, 0]],
@@ -231,7 +234,13 @@ class QRspec
     //----------------------------------------------------------------------
     // CACHEABLE!!!
 
-    public static function getEccSpec($version, $level, array &$spec)
+    /**
+     * @param int   $version
+     * @param int   $level
+     * @param array<int> $spec
+     * @return void
+     */
+    public static function getEccSpec(int $version, int $level, array &$spec):void
     {
         if(count($spec) < 5)
         {
@@ -269,8 +278,8 @@ class QRspec
     // between them.
 
     // See Table 1 in Appendix E (pp.71) of JIS X0510:2004.
-
-    public static $alignmentPattern = [
+    /** @var array<array<int>> $alignmentPattern [version ⇒ [ x:int, y:int]] Position of alignment pattern, This array includes only the 2nd and 3rd position of aligment. Rest of them can be calculated from the distance between them. See Table 1 in Appendix E (pp.71) of JIS X0510:2004.*/
+    protected static $alignmentPattern = [
             [0, 0],
             [0, 0], [18, 0], [22, 0], [26, 0], [30, 0], // 1- 5
             [34, 0], [22, 38], [24, 42], [26, 46], [28, 50], // 6-10
@@ -285,11 +294,11 @@ class QRspec
 
     /** --------------------------------------------------------------------
      * Put an alignment marker.
-     * @param $frame
-     * @param $width
-     * @param $ox,oy center coordinate of the pattern
+     * @param array<array<string>> $frame
+     * @param int $ox center coordinate of the pattern
+     * @param int $oy center coordinate of the pattern
      */
-    public static function putAlignmentMarker(array &$frame, $ox, $oy)
+    public static function putAlignmentMarker(array &$frame, int $ox, int $oy):void
     {
         $finder = [
                 "\xa1\xa1\xa1\xa1\xa1",
@@ -308,8 +317,13 @@ class QRspec
         }
     }
 
-    //----------------------------------------------------------------------
-    public static function putAlignmentPattern($version, &$frame, $width)
+    /**
+     * @param int $version
+     * @param array<array<string>> $frame
+     * @param int $width
+     * @return void
+     */
+    public static function putAlignmentPattern(int $version, array &$frame, int $width)
     {
         if($version < 2)
             return;
@@ -359,8 +373,8 @@ class QRspec
     // See Table 1 in Appendix D (pp.68) of JIS X0510:2004.
 
     // size: [QRSPEC_VERSION_MAX - 6]
-
-    public static $versionPattern = [
+    /** @var array<int> $versionPattern [version⇒int] Version information pattern (BCH coded). See Table 1 in Appendix D (pp.68) of JIS X0510:2004. size: [QRSPEC_VERSION_MAX - 6]*/
+    protected static $versionPattern = [
             0x07c94, 0x085bc, 0x09a99, 0x0a4d3, 0x0bbf6, 0x0c762, 0x0d847, 0x0e60d,
             0x0f928, 0x10b78, 0x1145d, 0x12a17, 0x13532, 0x149a6, 0x15683, 0x168c9,
             0x177ec, 0x18ec4, 0x191e1, 0x1afab, 0x1b08e, 0x1cc1a, 0x1d33f, 0x1ed75,
@@ -369,7 +383,7 @@ class QRspec
     ];
 
     //----------------------------------------------------------------------
-    public static function getVersionPattern($version)
+    public static function getVersionPattern(int $version):int
     {
         if($version < 7 || $version > QRConstants::QRSPEC_VERSION_MAX)
             return 0;
@@ -380,7 +394,8 @@ class QRspec
     // Format information --------------------------------------------------
     // See calcFormatInfo in tests/test_qrspec.c (orginal qrencode c lib)
 
-    public static $formatInfo = [
+    /** @var array<array<int>> $formatInfo Format information [ level ⇒ [ mask => int ] ]  */
+    protected static $formatInfo = [
             [0x77c4, 0x72f3, 0x7daa, 0x789d, 0x662f, 0x6318, 0x6c41, 0x6976],
             [0x5412, 0x5125, 0x5e7c, 0x5b4b, 0x45f9, 0x40ce, 0x4f97, 0x4aa0],
             [0x355f, 0x3068, 0x3f31, 0x3a06, 0x24b4, 0x2183, 0x2eda, 0x2bed],
@@ -400,15 +415,18 @@ class QRspec
 
     // Frame ---------------------------------------------------------------
     // Cache of initial frames.
-
-    public static $frames = [];
+    /**
+     * @var array<null|array<string>> $frames [version⇒frame] Cache of initial frames
+     */
+    protected static $frames = [];
 
     /** --------------------------------------------------------------------
      * Put a finder pattern.
-     * @param $frame
-     * @param $ox,$ oy upper-left coordinate of the pattern
+     * @param array<string> $frame
+     * @param int $ox upper-left coordinate of the pattern
+     * @param int $oy upper-left coordinate of the pattern
      */
-    public static function putFinderPattern(&$frame, $ox, $oy)
+    public static function putFinderPattern(array &$frame, int $ox, int $oy):void
     {
         $finder = [
                 "\xc1\xc1\xc1\xc1\xc1\xc1\xc1",
@@ -426,11 +444,15 @@ class QRspec
         }
     }
 
-    //----------------------------------------------------------------------
-    public static function createFrame($version)
+    /**
+     * @param int $version
+     * @return array<string> frame[i]
+     */
+    public static function createFrame(int $version):array
     {
         $width     = self::$capacity[$version][QRConstants::QRCAP_WIDTH];
         $frameLine = str_repeat("\0", $width);
+        /** @var array<string> $frame */
         $frame     = array_fill(0, $width, $frameLine);
 
         // Finder pattern
@@ -507,6 +529,7 @@ class QRspec
         }
 
         // and a little bit...
+        // note $frame[i][8] returns the 8th char from string $frame[i]
         $frame[$width - 8][8] = "\x81";
 
         return $frame;
@@ -531,9 +554,9 @@ class QRspec
                 }
             </style>
             <?php
-            echo '<pre><tt><br/ ><br/ ><br/ >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+            echo '<pre><br/ ><br/ ><br/ >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
             echo join("<br/ >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", $frame);
-            echo '</tt></pre><br/ ><br/ ><br/ ><br/ ><br/ ><br/ >';
+            echo '</pre><br/ ><br/ ><br/ ><br/ ><br/ ><br/ >';
 
         }
         else
@@ -583,9 +606,9 @@ class QRspec
                 }
             </style>
             <?php
-            echo "<pre><tt>";
+            echo "<pre>";
             echo join("<br/ >", $frame);
-            echo "</tt></pre>";
+            echo "</pre>";
 
         }
     }
@@ -602,8 +625,11 @@ class QRspec
         return explode("\n", gzuncompress($code));
     }
 
-    //----------------------------------------------------------------------
-    public static function newFrame($version)
+    /**
+     * @param int $version
+     * @return null|array<string>
+     */
+    public static function newFrame(int $version)
     {
         if($version < 1 || $version > QRConstants::QRSPEC_VERSION_MAX)
             return null;
@@ -637,48 +663,83 @@ class QRspec
         return self::$frames[$version];
     }
 
-    //----------------------------------------------------------------------
-    public static function rsBlockNum($spec)
+    /**
+     * @param array<int> $spec
+     * @return int
+     */
+    public static function rsBlockNum(array $spec):int
     {
         return $spec[0] + $spec[3];
     }
 
-    public static function rsBlockNum1($spec)
+    /**
+     * @param array<int> $spec
+     * @return int
+     */
+    public static function rsBlockNum1(array $spec):int
     {
         return $spec[0];
     }
 
-    public static function rsDataCodes1($spec)
+    /**
+     * @param array<int> $spec
+     * @return int
+     */
+    public static function rsDataCodes1(array $spec):int
     {
         return $spec[1];
     }
 
-    public static function rsEccCodes1($spec)
+    /**
+     * @param array<int> $spec
+     * @return int
+     */
+    public static function rsEccCodes1(array $spec):int
     {
         return $spec[2];
     }
 
-    public static function rsBlockNum2($spec)
+    /**
+     * @param array<int> $spec
+     * @return int
+     */
+    public static function rsBlockNum2(array $spec):int
     {
         return $spec[3];
     }
 
-    public static function rsDataCodes2($spec)
+    /**
+     * @param array<int> $spec
+     * @return int
+     */
+    public static function rsDataCodes2(array $spec):int
     {
         return $spec[4];
     }
 
-    public static function rsEccCodes2($spec)
+    /**
+     * @param array<int> $spec
+     * @return int
+     */
+    public static function rsEccCodes2(array $spec):int
     {
         return $spec[2];
     }
 
-    public static function rsDataLength($spec)
+    /**
+     * @param array<int> $spec
+     * @return int
+     */
+    public static function rsDataLength(array $spec):int
     {
         return ($spec[0]*$spec[1]) + ($spec[3]*$spec[4]);
     }
 
-    public static function rsEccLength($spec)
+    /**
+     * @param array<int> $spec
+     * @return int
+     */
+    public static function rsEccLength(array $spec):int
     {
         return ($spec[0] + $spec[3])*$spec[2];
     }

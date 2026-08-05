@@ -150,8 +150,12 @@ class QRrsItem
         return $rs;
     }
     
-    //----------------------------------------------------------------------
-    public function encode_rs_char($data, &$parity)
+    /**
+     * @param array<int> $data
+     * @param array<int> $parity
+     * @return void
+     */
+    public function encode_rs_char(array $data, array &$parity):void
     {
         $MM       =& $this->mm;
         $NN       =& $this->nn;

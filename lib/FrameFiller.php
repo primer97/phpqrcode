@@ -6,14 +6,18 @@ class FrameFiller
 {
     
     public $width;
+    /** @var array<string> $frame [y⇒[line]] */
     public $frame;
     public $x;
     public $y;
     public $dir;
     public $bit;
     
-    //----------------------------------------------------------------------
-    public function __construct($width, &$frame)
+    /**
+     * @param int $width
+     * @param array<string> $frame
+     */
+    public function __construct(int $width, array &$frame)
     {
         $this->width = $width;
         $this->frame = $frame;
@@ -23,25 +27,30 @@ class FrameFiller
         $this->bit   = -1;
     }
     
-    //----------------------------------------------------------------------
-    
     /**
-     * @param array{'x':mixed, 'y':mixed} $at
+     * @param array{'x':int, 'y':int} $at
      * @param int   $val
      * @return void
      */
     public function setFrameAt(array $at, int $val):void
     {
+        // note $this->frame[i][pos] returns the char at position 'pos' from string $this->frame[i]
         $this->frame[$at['y']][$at['x']] = chr($val);
     }
     
-    //----------------------------------------------------------------------
+    /**
+     * @param array{'x':int, 'y':int} $at
+     * @return int
+     */
     public function getFrameAt(array $at):int
     {
+        // note $this->frame[i][pos] returns the char at position 'pos' from string $this->frame[i]
         return ord($this->frame[$at['y']][$at['x']]);
     }
     
-    //----------------------------------------------------------------------
+    /**
+     * @return array{'x':int,'y':int}|null Next position
+     */
     public function next()
     {
         do
@@ -102,7 +111,8 @@ class FrameFiller
             $this->x = $x;
             $this->y = $y;
             
-        } while(ord($this->frame[$y][$x]) & 0x80);
+        }
+        while(ord($this->frame[$y][$x]) & 0x80); // note $this->frame[y][x] returns the char at position 'x' from string $this->frame[y]
         
         return ['x' => $x, 'y' => $y];
     }

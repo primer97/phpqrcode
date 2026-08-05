@@ -39,12 +39,15 @@ use Exception;
 class QRsplit
 {
     
+    /** @var string $dataStr */
     public $dataStr = '';
+    /** @var QRinput $input */
     public $input;
+    /** @var int $modeHint */
     public $modeHint;
     
     //----------------------------------------------------------------------
-    public function __construct($dataStr, $input, $modeHint)
+    public function __construct(string $dataStr, QRinput $input, int $modeHint)
     {
         $this->dataStr  = $dataStr;
         $this->input    = $input;
@@ -52,7 +55,7 @@ class QRsplit
     }
     
     //----------------------------------------------------------------------
-    public static function isdigitat($str, $pos)
+    public static function isdigitat(string $str, int $pos):bool
     {
         if($pos >= strlen($str))
             return false;
@@ -61,7 +64,7 @@ class QRsplit
     }
     
     //----------------------------------------------------------------------
-    public static function isalnumat($str, $pos)
+    public static function isalnumat(string $str, int $pos):bool
     {
         if($pos >= strlen($str))
             return false;
@@ -70,7 +73,7 @@ class QRsplit
     }
     
     //----------------------------------------------------------------------
-    public function identifyMode($pos)
+    public function identifyMode(int $pos):int
     {
         if($pos >= strlen($this->dataStr))
             return QRConstants::QR_MODE_NUL;
@@ -103,7 +106,7 @@ class QRsplit
     }
     
     //----------------------------------------------------------------------
-    public function eatNum()
+    public function eatNum():int
     {
         $ln = QRspec::lengthIndicator(QRConstants::QR_MODE_NUM, $this->input->getVersion());
         
@@ -145,7 +148,7 @@ class QRsplit
     }
     
     //----------------------------------------------------------------------
-    public function eatAn()
+    public function eatAn():int
     {
         $la = QRspec::lengthIndicator(QRConstants::QR_MODE_AN, $this->input->getVersion());
         $ln = QRspec::lengthIndicator(QRConstants::QR_MODE_NUM, $this->input->getVersion());
@@ -202,7 +205,7 @@ class QRsplit
     }
     
     //----------------------------------------------------------------------
-    public function eatKanji()
+    public function eatKanji():int
     {
         $p = 0;
         
@@ -219,7 +222,7 @@ class QRsplit
     }
     
     //----------------------------------------------------------------------
-    public function eat8()
+    public function eat8():int
     {
         $la = QRspec::lengthIndicator(QRConstants::QR_MODE_AN, $this->input->getVersion());
         $ln = QRspec::lengthIndicator(QRConstants::QR_MODE_NUM, $this->input->getVersion());
@@ -325,7 +328,7 @@ class QRsplit
     }
     
     //----------------------------------------------------------------------
-    public function toUpper()
+    public function toUpper():string
     {
         $stringLen = strlen($this->dataStr);
         $p         = 0;
@@ -351,7 +354,7 @@ class QRsplit
     }
     
     //----------------------------------------------------------------------
-    public static function splitStringToQRinput($string, QRinput $input, $modeHint, $casesensitive = true)
+    public static function splitStringToQRinput($string, QRinput $input, int $modeHint, $casesensitive = true)
     {
         if(is_null($string) || $string == '\0' || $string == '')
         {

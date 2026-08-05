@@ -29,9 +29,13 @@ class QRtools
 {
     
     //----------------------------------------------------------------------
-    protected static /*array*/ $frames=[]; //todo enable at php7.4+
+    protected static /*array*/ $frames=[]; //todo  no usage ?
     
-    public static function binarize($frame)
+    /**
+     * @param array<array<string>> $frame
+     * @return array<array<string>>
+     */
+    public static function binarize(array $frame):array
     {
         $len = count($frame);
         foreach($frame as &$frameLine)
@@ -80,13 +84,13 @@ class QRtools
     }
     
     //----------------------------------------------------------------------
-    public static function clearCache()
+    public static function clearCache():void
     {
         self::$frames = [];
     }
     
     //----------------------------------------------------------------------
-    public static function buildCache()
+    public static function buildCache():void
     {
         $mask = new QRmask();
         for($a = 1; $a <= QRConstants::QRSPEC_VERSION_MAX; $a++)
@@ -106,14 +110,21 @@ class QRtools
         
     }
     
-    //----------------------------------------------------------------------
-    public static function log(?string $outfile, $err)
+    /**
+     * @param string|null $outfile
+     * @param string $err Error message
+     * @return void
+     */
+    public static function log(?string $outfile, string $err)
     {
         // error handler - for later, allow user callback
     }
     
-    //----------------------------------------------------------------------
-    public static function dumpMask($frame)
+    /**
+     * @param array<array<int>> $frame
+     * @return void
+     */
+    public static function dumpMask(array $frame):void
     {
         $width = count($frame);
         for($y = 0; $y < $width; $y++)

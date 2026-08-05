@@ -28,8 +28,8 @@
 namespace primer\phpqrcode;
 class QRbitstream
 {
-    
-    public $data = [];
+    /** @var array<int> $data  */
+    protected $data = [];
     
     //----------------------------------------------------------------------
     public function size():int
@@ -45,7 +45,7 @@ class QRbitstream
     }
     
     //----------------------------------------------------------------------
-    public static function newFromNum($bits, $num):QRbitstream
+    public static function newFromNum(int $bits, $num):QRbitstream
     {
         $bstream = new QRbitstream();
         $bstream->allocate($bits);
@@ -67,7 +67,12 @@ class QRbitstream
         return $bstream;
     }
     
-    //----------------------------------------------------------------------
+    
+    /**
+     * @param int        $size
+     * @param array<int> $data
+     * @return QRbitstream
+     */
     public static function newFromBytes(int $size, array $data):QRbitstream
     {
         $bstream = new QRbitstream();
@@ -95,8 +100,12 @@ class QRbitstream
         return $bstream;
     }
     
-    //----------------------------------------------------------------------
-    public function append(QRbitstream $arg):int
+    
+    /**
+     * @param QRbitstream|null $arg -- todo check if null possible ?
+     * @return int
+     */
+    public function append(?QRbitstream $arg):int
     {
         if(is_null($arg))
         {
@@ -120,15 +129,16 @@ class QRbitstream
     }
     
     //----------------------------------------------------------------------
-    public function appendNum($bits, $num)
+    public function appendNum(int $bits, int $num):int
     {
         if($bits == 0)
             return 0;
         
         $b = QRbitstream::newFromNum($bits, $num);
         
-        if(is_null($b))
-            return -1;
+//        if(is_null($b)) can't be null
+//            return -1;
+        assert( !is_null($b)); //todo check if we need that assertion ?
         
         $ret = $this->append($b);
         unset($b);
@@ -136,16 +146,22 @@ class QRbitstream
         return $ret;
     }
     
-    //----------------------------------------------------------------------
-    public function appendBytes($size, $data)
+    
+    /**
+     * @param int   $size
+     * @param array<int> $data
+     * @return int
+     */
+    public function appendBytes(int $size, array $data):int
     {
         if($size == 0)
             return 0;
         
         $b = QRbitstream::newFromBytes($size, $data);
         
-        if(is_null($b))
-            return -1;
+//        if(is_null($b)) can't be null
+//            return -1;
+        assert( !is_null($b)); //todo check if we need that assertion ?
         
         $ret = $this->append($b);
         unset($b);
@@ -153,8 +169,11 @@ class QRbitstream
         return $ret;
     }
     
-    //----------------------------------------------------------------------
-    public function toByte()
+    
+    /**
+     * @return array<int>
+     */
+    public function toByte():array
     {
         
         $size = $this->size();

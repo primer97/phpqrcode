@@ -46,7 +46,6 @@ class QRencode
     public $level = QRConstants::QR_ECLEVEL_L;
     public $hint  = QRConstants::QR_MODE_8;
     
-    //----------------------------------------------------------------------
     
     /**
      * @param int $level Error correction level
@@ -93,7 +92,12 @@ class QRencode
         return $code->data;
     }
     
-    //----------------------------------------------------------------------
+    /**
+     * @param string $intext
+     * @param bool   $outfile
+     * @return mixed|void
+     * @throws Exception
+     */
     public function encode(string $intext, bool $outfile = false)
     {
         $code = new QRcode();
@@ -124,7 +128,7 @@ class QRencode
         {
             
             ob_start();
-            $tab = $this->encode($intext);
+            $tab = $this->encode($intext); //todo it may raise an Exception here (empty string) then ob_end_clean() is not proceeded. we have to fix that.
             $err = ob_get_contents();
             ob_end_clean();
             

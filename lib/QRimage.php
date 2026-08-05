@@ -27,8 +27,15 @@ namespace primer\phpqrcode;
 class QRimage
 {
     
-    //----------------------------------------------------------------------
-    public static function png($frame, ?string $filename = null, int $pixelPerPoint = 4, int $outerFrame = 4, bool $sendToBrowser = false)
+    /**
+     * @param array<array<string>> $frame
+     * @param string|null $filename
+     * @param int         $pixelPerPoint
+     * @param int         $outerFrame
+     * @param bool        $sendToBrowser
+     * @return void
+     */
+    public static function png(array $frame, ?string $filename = null, int $pixelPerPoint = 4, int $outerFrame = 4, bool $sendToBrowser = false):void
     {
         $image = self::image($frame, $pixelPerPoint, $outerFrame);
         
@@ -54,8 +61,16 @@ class QRimage
         imagedestroy($image);
     }
     
-    //----------------------------------------------------------------------
-    public static function jpg($frame, ?string $filename = null, $pixelPerPoint = 8, $outerFrame = 4, $q = 85)
+    
+    /**
+     * @param array<array<string>>  $frame
+     * @param string|null $filename
+     * @param int         $pixelPerPoint
+     * @param int         $outerFrame
+     * @param int         $q
+     * @return void
+     */
+    public static function jpg(array $frame, ?string $filename = null, int $pixelPerPoint = 8, int $outerFrame = 4, int $q = 85):void
     {
         $image = self::image($frame, $pixelPerPoint, $outerFrame);
         
@@ -72,8 +87,13 @@ class QRimage
         imagedestroy($image);
     }
     
-    //----------------------------------------------------------------------
-    private static function image($frame, $pixelPerPoint = 4, $outerFrame = 4)
+    /**
+     * @param array $frame
+     * @param int   $pixelPerPoint
+     * @param int   $outerFrame
+     * @return false|\GdImage|resource
+     */
+    private static function image(array $frame, int $pixelPerPoint = 4, int $outerFrame = 4)
     {
         $h = count($frame);
         $w = strlen($frame[0]);

@@ -29,18 +29,25 @@ namespace primer\phpqrcode;
 
 use Exception;
 
-//define('STRUCTURE_HEADER_BITS', 20);
-//define('MAX_STRUCTURED_SYMBOLS', 16);
-
 class QRinputItem
 {
-    
+    /** @var int $mode */
     public $mode;
+    /** @var int $size */
     public $size;
+    /** @var array<string> $data */
     public $data;
+    /** @var QRbitstream|null $bstream */
     public $bstream;
     
-    public function __construct($mode, $size, $data, $bstream = null)
+    /**
+     * @param int   $mode
+     * @param int   $size
+     * @param array<string> $data
+     * @param ?QRbitstream  $bstream
+     * @throws Exception
+     */
+    public function __construct(int $mode, int $size, array $data, $bstream = null)
     {
         $setData = array_slice($data, 0, $size);
         
@@ -61,7 +68,7 @@ class QRinputItem
     }
     
     //----------------------------------------------------------------------
-    public function encodeModeNum($version)
+    public function encodeModeNum(int $version):int
     {
         try
         {
@@ -103,7 +110,7 @@ class QRinputItem
     }
     
     //----------------------------------------------------------------------
-    public function encodeModeAn($version)
+    public function encodeModeAn(int $version):int
     {
         try
         {
@@ -137,7 +144,7 @@ class QRinputItem
     }
     
     //----------------------------------------------------------------------
-    public function encodeMode8($version)
+    public function encodeMode8(int $version):int
     {
         try
         {
@@ -161,7 +168,7 @@ class QRinputItem
     }
     
     //----------------------------------------------------------------------
-    public function encodeModeKanji($version)
+    public function encodeModeKanji(int $version):int
     {
         try
         {
@@ -199,7 +206,7 @@ class QRinputItem
     }
     
     //----------------------------------------------------------------------
-    public function encodeModeStructure()
+    public function encodeModeStructure():int
     {
         try
         {
@@ -220,10 +227,8 @@ class QRinputItem
     }
     
     //----------------------------------------------------------------------
-    public function estimateBitStreamSizeOfEntry($version)
+    public function estimateBitStreamSizeOfEntry(int $version):int
     {
-        $bits = 0;
-        
         if($version == 0)
             $version = 1;
         
@@ -257,7 +262,7 @@ class QRinputItem
     }
     
     //----------------------------------------------------------------------
-    public function encodeBitStream($version)
+    public function encodeBitStream(int $version):int
     {
         try
         {
@@ -322,9 +327,5 @@ class QRinputItem
     }
 }
 
-;
 
-//##########################################################################
-        
-        
     
