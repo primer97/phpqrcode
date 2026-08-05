@@ -120,7 +120,7 @@ class QRcode
         $input = new QRinput($version, $level);
         if($input == null) return null;
         
-        $ret = $input->append($input, QRConstants::QR_MODE_8, strlen($string));
+        $ret = $input->append( QRConstants::QR_MODE_8, strlen($string),str_split($string));
         if($ret < 0)
         {
             unset($input);
