@@ -93,14 +93,24 @@ class QRcode
         return $this;
     }
     
-    //----------------------------------------------------------------------
+    /**
+     * @param QRinput $input
+     * @return $this|null
+     * @throws Exception
+     */
     public function encodeInput(QRinput $input)
     {
         return $this->encodeMask($input, -1);
     }
     
-    //----------------------------------------------------------------------
-    public function encodeString8bit($string, $version, $level)
+    /**
+     * @param string|null $string
+     * @param int         $version
+     * @param int         $level
+     * @return $this|null
+     * @throws Exception
+     */
+    public function encodeString8bit(?string $string, int $version, int $level)
     {
         if($string == null)
         {

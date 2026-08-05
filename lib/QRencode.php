@@ -62,12 +62,12 @@ class QRencode
         $enc->size   = $size;
         $enc->margin = $margin;
         
-        switch($level.'')
+        switch($level)
         {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
+            case 0:
+            case 1:
+            case 2:
+            case 3:
                 $enc->level = $level;
                 break;
             default:

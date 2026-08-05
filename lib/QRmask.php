@@ -407,6 +407,13 @@ class QRmask
     
     
     //----------------------------------------------------------------------
+    
+    /**
+     * @param int $width
+     * @param $frame
+     * @param int $level
+     * @return array|mixed
+     */
     public function mask($width, $frame, $level)
     {
         $minDemerit  = PHP_INT_MAX;

@@ -357,7 +357,7 @@ class QRsplit
     }
     
     //----------------------------------------------------------------------
-    public static function splitStringToQRinput($string, QRinput $input, int $modeHint, $casesensitive = true)
+    public static function splitStringToQRinput($string, QRinput $input, int $modeHint, bool $casesensitive = true)
     {
         if(is_null($string) || $string == '\0' || $string == '')
         {
