@@ -29,7 +29,7 @@ namespace primer\phpqrcode;
 
 class QRmask
 {
-    
+    /** @var array{0:int, 1:int, 177:int} $runLength [ 0=>0, 1=>0, 2=>0 ... 177=>0] */
     public $runLength = [];
     
     //----------------------------------------------------------------------
@@ -39,7 +39,15 @@ class QRmask
     }
     
     //----------------------------------------------------------------------
-    public function writeFormatInformation($width, &$frame, $mask, $level)
+    
+    /**
+     * @param int $width
+     * @param array<array<int|string>> $frame
+     * @param int $mask
+     * @param int $level
+     * @return int
+     */
+    protected function writeFormatInformation(int $width, &$frame, $mask, $level):int
     {
         $blacks = 0;
         $format = QRspec::getFormatInfo($mask, $level);
@@ -138,7 +146,14 @@ class QRmask
     }
     
     //----------------------------------------------------------------------
-    private function generateMaskNo($maskNo, $width, $frame)
+    
+    /**
+     * @param int $maskNo
+     * @param int $width
+     * @param array<array<int>> $frame
+     * @return array<array<int>>
+     */
+    private function generateMaskNo(int $maskNo,int $width,array $frame):array
     {
         $bitMask = array_fill(0, $width, array_fill(0, $width, 0));
         
@@ -163,7 +178,12 @@ class QRmask
     }
     
     //----------------------------------------------------------------------
-    public static function serial($bitFrame)
+    
+    /**
+     * @param array<array<int>> $bitFrame
+     * @return false|string
+     */
+    public static function serial(array $bitFrame)
     {
         $codeArr = [];
         
@@ -174,7 +194,12 @@ class QRmask
     }
     
     //----------------------------------------------------------------------
-    public static function unserial($code)
+    
+    /**
+     * @param string $code
+     * @return array<array<string>>
+     */
+    public static function unserial(string $code):array
     {
         $codeArr = [];
         
@@ -186,6 +211,15 @@ class QRmask
     }
     
     //----------------------------------------------------------------------
+    
+    /**
+     * @param int $maskNo
+     * @param int $width
+     * @param $s
+     * @param array $d
+     * @param bool $maskGenOnly
+     * @return int|void
+     */
     public function makeMaskNo($maskNo, $width, $s, &$d, $maskGenOnly = false)
     {
         $b       = 0;
@@ -233,7 +267,15 @@ class QRmask
     }
     
     //----------------------------------------------------------------------
-    public function makeMask($width, $frame, $maskNo, $level)
+    
+    /**
+     * @param int $width
+     * @param $frame
+     * @param $maskNo
+     * @param $level
+     * @return array<array<int>>
+     */
+    public function makeMask(int $width, $frame, $maskNo, $level):array
     {
         $masked = array_fill(0, $width, str_repeat("\0", $width));
         $this->makeMaskNo($maskNo, $width, $frame, $masked);

@@ -32,20 +32,20 @@ class QRbitstream
     public $data = [];
     
     //----------------------------------------------------------------------
-    public function size()
+    public function size():int
     {
         return count($this->data);
     }
     
     //----------------------------------------------------------------------
-    public function allocate($setLength)
+    public function allocate(int $setLength):int
     {
         $this->data = array_fill(0, $setLength, 0);
         return 0;
     }
     
     //----------------------------------------------------------------------
-    public static function newFromNum($bits, $num)
+    public static function newFromNum($bits, $num):QRbitstream
     {
         $bstream = new QRbitstream();
         $bstream->allocate($bits);
@@ -68,7 +68,7 @@ class QRbitstream
     }
     
     //----------------------------------------------------------------------
-    public static function newFromBytes($size, $data)
+    public static function newFromBytes(int $size, array $data):QRbitstream
     {
         $bstream = new QRbitstream();
         $bstream->allocate($size*8);
@@ -96,7 +96,7 @@ class QRbitstream
     }
     
     //----------------------------------------------------------------------
-    public function append(QRbitstream $arg)
+    public function append(QRbitstream $arg):int
     {
         if(is_null($arg))
         {

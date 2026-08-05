@@ -24,13 +24,19 @@ class FrameFiller
     }
     
     //----------------------------------------------------------------------
-    public function setFrameAt($at, $val)
+    
+    /**
+     * @param array{'x':mixed, 'y':mixed} $at
+     * @param int   $val
+     * @return void
+     */
+    public function setFrameAt(array $at, int $val):void
     {
         $this->frame[$at['y']][$at['x']] = chr($val);
     }
     
     //----------------------------------------------------------------------
-    public function getFrameAt($at)
+    public function getFrameAt(array $at):int
     {
         return ord($this->frame[$at['y']][$at['x']]);
     }

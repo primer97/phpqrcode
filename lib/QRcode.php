@@ -6,7 +6,7 @@ use Exception;
 
 class QRcode
 {
-    
+    /** @var int $version */
     public $version;
     public $width;
     public $data;

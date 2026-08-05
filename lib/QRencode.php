@@ -42,11 +42,19 @@ class QRencode
     
     public $structured = 0; // not supported yet
     
+    /** @var int $level error correction level 0 to 3 */
     public $level = QRConstants::QR_ECLEVEL_L;
     public $hint  = QRConstants::QR_MODE_8;
     
     //----------------------------------------------------------------------
-    public static function factory($level = QRConstants::QR_ECLEVEL_L, $size = 3, $margin = 4)
+    
+    /**
+     * @param int $level Error correction level
+     * @param int $size pixel size
+     * @param int $margin silent zone size
+     * @return QRencode
+     */
+    public static function factory(int $level = QRConstants::QR_ECLEVEL_L, int $size = 3, int $margin = 4):QRencode
     {
         $enc         = new QRencode();
         $enc->size   = $size;
@@ -60,21 +68,8 @@ class QRencode
             case '3':
                 $enc->level = $level;
                 break;
-            case 'l':
-            case 'L':
+            default:
                 $enc->level = QRConstants::QR_ECLEVEL_L;
-                break;
-            case 'm':
-            case 'M':
-                $enc->level = QRConstants::QR_ECLEVEL_M;
-                break;
-            case 'q':
-            case 'Q':
-                $enc->level = QRConstants::QR_ECLEVEL_Q;
-                break;
-            case 'h':
-            case 'H':
-                $enc->level = QRConstants::QR_ECLEVEL_H;
                 break;
         }
         
@@ -99,7 +94,7 @@ class QRencode
     }
     
     //----------------------------------------------------------------------
-    public function encode($intext, $outfile = false)
+    public function encode(string $intext, bool $outfile = false)
     {
         $code = new QRcode();
         
@@ -123,7 +118,7 @@ class QRencode
     }
     
     //----------------------------------------------------------------------
-    public function encodePNG($intext, ?string $outfile = null, $sendToBrowser = false)
+    public function encodePNG(string $intext, ?string $outfile = null, bool $sendToBrowser = false):void
     {
         try
         {

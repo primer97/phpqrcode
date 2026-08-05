@@ -387,7 +387,7 @@ class QRspec
             [0x1689, 0x13be, 0x1ce7, 0x19d0, 0x0762, 0x0255, 0x0d0c, 0x083b]
     ];
 
-    public static function getFormatInfo($mask, $level)
+    public static function getFormatInfo(int $mask, int $level):int
     {
         if($mask < 0 || $mask > 7)
             return 0;
