@@ -1,3 +1,6 @@
+* 1.4.0
+ - requires php 7.4+
+
 * 1.2.2 build 2026-08-05
   - feature allow force mode settings (numeric / alphanum, mode8, Kanji)
   - feature allow manipulate of mask options
@@ -8,7 +11,6 @@
   - fix php7.3
   - cleanup code (dead code)
   - tested toward phpstan
-
 
 * 1.2.0 build 2026-08-02
    New version - Work in progress.
