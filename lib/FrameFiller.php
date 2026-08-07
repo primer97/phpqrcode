@@ -5,13 +5,13 @@ namespace primer\phpqrcode;
 class FrameFiller
 {
     
-    public $width;
+    public int $width;
     /** @var array<string> $frame [y⇒[line]] */
-    public $frame;
-    public $x;
-    public $y;
-    public $dir;
-    public $bit;
+    public array $frame;
+    public int $x;
+    public int $y;
+    public int $dir;
+    public int $bit;
     
     /**
      * @param int $width

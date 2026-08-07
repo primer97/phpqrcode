@@ -28,10 +28,6 @@ class QRConstants
     public const QR_ECLEVEL_Q = 2;
     public const QR_ECLEVEL_H = 3;
     
-    // Supported output formats
-    public const QR_FORMAT_TEXT = 0;
-    public const QR_FORMAT_PNG  = 1;
-    
     public const QR_IMAGE = true;
     
     public const STRUCTURE_HEADER_BITS  = 20;

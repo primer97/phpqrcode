@@ -29,8 +29,8 @@ namespace primer\phpqrcode;
 
 class QRmask
 {
-    /** @var array{0:int, 1:int, 177:int} $runLength [ 0=>0, 1=>0, 2=>0 ... 177=>0] */
-    public $runLength = [];
+    /** @var array<int> $runLength [ 0=>0, 1=>0, 2=>0 ... 177=>0] */
+    private array $runLength = [];
     
     //----------------------------------------------------------------------
     public function __construct()
@@ -112,12 +112,12 @@ class QRmask
     
     public function mask1($x, $y)
     {
-        return ($y & 1);
+        return $y & 1;
     }
     
     public function mask2($x, $y)
     {
-        return ($x%3);
+        return $x%3;
     }
     
     public function mask3($x, $y)
@@ -150,8 +150,8 @@ class QRmask
     /**
      * @param int $maskNo
      * @param int $width
-     * @param array<array<int>> $frame
-     * @return array<array<int>>
+     * @param array<string> $frame
+     * @return array<array<int>> [ [ 0,0,0,0,0...], [0,1,0,0,1,1...]...]
      */
     private function generateMaskNo(int $maskNo,int $width,array $frame):array
     {
@@ -220,7 +220,7 @@ class QRmask
      * @param bool $maskGenOnly
      * @return int|void
      */
-    public function makeMaskNo($maskNo, $width, $s, &$d, $maskGenOnly = false)
+    public function makeMaskNo(int $maskNo, int $width, $s, array &$d, bool $maskGenOnly = false)
     {
         $b       = 0;
         $bitMask = [];

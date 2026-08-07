@@ -91,7 +91,7 @@ class QRimage
      * @param array $frame
      * @param int   $pixelPerPoint
      * @param int   $outerFrame
-     * @return false|\GdImage|resource
+     * @return false|\GdImage
      */
     private static function image(array $frame, int $pixelPerPoint = 4, int $outerFrame = 4)
     {

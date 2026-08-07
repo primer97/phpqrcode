@@ -45,7 +45,7 @@ class QRbitstream
     }
     
     //----------------------------------------------------------------------
-    public static function newFromNum(int $bits, $num):QRbitstream
+    public static function newFromNum(int $bits, int $num):QRbitstream
     {
         $bstream = new QRbitstream();
         $bstream->allocate($bits);

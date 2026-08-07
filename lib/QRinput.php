@@ -91,7 +91,7 @@ class QRinput
     
     //----------------------------------------------------------------------
     
-    public function insertStructuredAppendHeader(int $size, int $index, $parity):int
+    public function insertStructuredAppendHeader(int $size, int $index,int $parity):int
     {
         if($size > QRConstants::MAX_STRUCTURED_SYMBOLS)
         {

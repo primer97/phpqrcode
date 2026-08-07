@@ -28,9 +28,6 @@ namespace primer\phpqrcode;
 class QRtools
 {
     
-    //----------------------------------------------------------------------
-    protected static /*array*/ $frames=[]; //todo  no usage ?
-    
     /**
      * @param array<array<string>> $frame
      * @return array<array<string>>
@@ -65,7 +62,7 @@ class QRtools
             $eccLevel = $mode[1];
         }
         
-        $qrTab = QRcode::text($code, false, $eccLevel);
+        $qrTab = QRcode::text($code, null, $eccLevel);
         $size  = count($qrTab);
         
         $barcode_array['num_rows'] = $size;
@@ -86,7 +83,7 @@ class QRtools
     //----------------------------------------------------------------------
     public static function clearCache():void
     {
-        self::$frames = [];
+//        self::$frames = [];
     }
     
     //----------------------------------------------------------------------

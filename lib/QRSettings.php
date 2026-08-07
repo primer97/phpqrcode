@@ -79,12 +79,12 @@ class QRSettings
     protected static $forcedMode = -1;
     public static function isForcedMode():bool
     {
-        return  static::$forcedMode !== -1;
+        return static::$forcedMode !== -1;
     }
     
     public static function getForcedMode():int
     {
-        return  static::$forcedMode;
+        return static::$forcedMode;
     }
 //endregion mode
 }

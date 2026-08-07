@@ -294,7 +294,7 @@ class QRspec
 
     /** --------------------------------------------------------------------
      * Put an alignment marker.
-     * @param array<array<string>> $frame
+     * @param array<string> $frame
      * @param int $ox center coordinate of the pattern
      * @param int $oy center coordinate of the pattern
      */
@@ -319,11 +319,11 @@ class QRspec
 
     /**
      * @param int $version
-     * @param array<array<string>> $frame
+     * @param array<string> $frame
      * @param int $width
      * @return void
      */
-    public static function putAlignmentPattern(int $version, array &$frame, int $width)
+    public static function putAlignmentPattern(int $version, array &$frame, int $width):void
     {
         if($version < 2)
             return;
@@ -418,7 +418,7 @@ class QRspec
     /**
      * @var array<null|array<string>> $frames [version⇒frame] Cache of initial frames
      */
-    protected static $frames = [];
+    protected static array $frames = [];
 
     /** --------------------------------------------------------------------
      * Put a finder pattern.
@@ -536,7 +536,7 @@ class QRspec
     }
 
     //----------------------------------------------------------------------
-    public static function debug($frame, $binary_mode = false)
+    public static function debug($frame, $binary_mode = false):void
     {
         if($binary_mode)
         {

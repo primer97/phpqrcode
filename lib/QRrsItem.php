@@ -32,20 +32,21 @@ namespace primer\phpqrcode;
 class QRrsItem
 {
     
-    public $mm;                  // Bits per symbol
-    public $nn;                  // Symbols per block (= (1<<mm)-1)
-    public $alpha_to = [];  // log lookup table
-    public $index_of = [];  // Antilog lookup table
-    public $genpoly  = [];   // Generator polynomial
-    public $nroots;              // Number of generator roots = number of parity symbols
-    public $fcr;                 // First consecutive root, index form
-    public $prim;                // Primitive element, index form
-    public $iprim;               // prim-th root of 1, index form
-    public $pad;                 // Padding bytes in shortened block
-    public $gfpoly;
+    public  int   $mm;                  // Bits per symbol
+    public  int   $nn;                  // Symbols per block (= (1<<mm)-1)
+    /** @var array<int> $alpha_to log lookup table */
+    private array $alpha_to = [];
+    private array $index_of = [];  // Antilog lookup table
+    private array $genpoly  = [];   // Generator polynomial
+    public  int   $nroots;              // Number of generator roots = number of parity symbols
+    public  int   $fcr;                 // First consecutive root, index form
+    public  int   $prim;                // Primitive element, index form
+    public  int   $iprim;               // prim-th root of 1, index form
+    public  int   $pad;                 // Padding bytes in shortened block
+    public  int   $gfpoly;
     
     //----------------------------------------------------------------------
-    public function modnn($x)
+    public function modnn(int $x):int
     {
         while($x >= $this->nn)
         {
@@ -57,7 +58,7 @@ class QRrsItem
     }
     
     //----------------------------------------------------------------------
-    public static function init_rs_char($symsize, $gfpoly, $fcr, $prim, $nroots, $pad)
+    public static function init_rs_char(int $symsize, int $gfpoly, int $fcr, int $prim, int $nroots, int $pad):?QRrsItem
     {
         // Common code for intializing a Reed-Solomon control block (char or int symbols)
         // Copyright 2004 Phil Karn, KA9Q
@@ -157,15 +158,15 @@ class QRrsItem
      */
     public function encode_rs_char(array $data, array &$parity):void
     {
-        $MM       =& $this->mm;
-        $NN       =& $this->nn;
+//        $MM       =& $this->mm;
+        $NN       =& $this->nn; //todo check syntax '=&'
         $ALPHA_TO =& $this->alpha_to;
         $INDEX_OF =& $this->index_of;
         $GENPOLY  =& $this->genpoly;
         $NROOTS   =& $this->nroots;
-        $FCR      =& $this->fcr;
-        $PRIM     =& $this->prim;
-        $IPRIM    =& $this->iprim;
+//        $FCR      =& $this->fcr;
+//        $PRIM     =& $this->prim;
+//        $IPRIM    =& $this->iprim;
         $PAD      =& $this->pad;
         $A0       =& $NN;
         

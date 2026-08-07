@@ -39,12 +39,9 @@ use Exception;
 class QRsplit
 {
     
-    /** @var string $dataStr */
-    public $dataStr = '';
-    /** @var QRinput $input */
-    public $input;
-    /** @var int $modeHint */
-    public $modeHint;
+    private string $dataStr = '';
+    private QRinput $input;
+    private int $modeHint;
     
     //----------------------------------------------------------------------
     public function __construct(string $dataStr, QRinput $input, int $modeHint)

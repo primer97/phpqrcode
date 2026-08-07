@@ -79,7 +79,7 @@ class QRencode
     }
     
     //----------------------------------------------------------------------
-    public function encodeRAW($intext, $outfile = false)
+    public function encodeRAW($intext, ?string $outfile = null):array
     {
         $code = new QRcode();
         
@@ -92,16 +92,16 @@ class QRencode
             $code->encodeString($intext, $this->version, $this->level, $this->hint, $this->casesensitive);
         }
         
-        return $code->data;
+        return $code->data; //todo build a getter
     }
     
     /**
      * @param string $intext
-     * @param bool   $outfile
-     * @return mixed|void
+     * @param ?string   $outfile
+     * @return array|void
      * @throws Exception
      */
-    public function encode(string $intext, bool $outfile = false)
+    public function encode(string $intext, ?string $outfile = null) //void|array
     {
         $code = new QRcode();
         
@@ -114,7 +114,7 @@ class QRencode
             $code->encodeString($intext, $this->version, $this->level, $this->hint, $this->casesensitive);
         }
         
-        if($outfile !== false)
+        if(!is_null($outfile))
         {
             file_put_contents($outfile, join("\n", QRtools::binarize($code->data)));
         }
