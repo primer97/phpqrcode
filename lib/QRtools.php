@@ -25,6 +25,9 @@
 namespace primer\phpqrcode;
 
 
+use primer\phpqrcode\Internal\QRmask;
+use primer\phpqrcode\Internal\QRspec;
+
 class QRtools
 {
     

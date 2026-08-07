@@ -1,7 +1,10 @@
 <?php
 
-namespace primer\phpqrcode;
+namespace primer\phpqrcode\Internal;
 
+/**
+ * @internal
+ */
 class QRstr
 {
     /**

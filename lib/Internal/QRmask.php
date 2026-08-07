@@ -25,8 +25,14 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-namespace primer\phpqrcode;
+namespace primer\phpqrcode\Internal;
 
+use primer\phpqrcode\QRConstants;
+use primer\phpqrcode\QRSettings;
+
+/**
+ * @internal
+ */
 class QRmask
 {
     /** @var array<int> $runLength [ 0=>0, 1=>0, 2=>0 ... 177=>0] */
@@ -41,13 +47,13 @@ class QRmask
     //----------------------------------------------------------------------
     
     /**
-     * @param int $width
+     * @param int                      $width
      * @param array<array<int|string>> $frame
-     * @param int $mask
-     * @param int $level
+     * @param int                      $mask
+     * @param int                      $level
      * @return int
      */
-    protected function writeFormatInformation(int $width, &$frame, $mask, $level):int
+    private function writeFormatInformation(int $width, &$frame, $mask, $level):int
     {
         $blacks = 0;
         $format = QRspec::getFormatInfo($mask, $level);
@@ -183,7 +189,7 @@ class QRmask
      * @param array<array<int>> $bitFrame
      * @return false|string
      */
-    public static function serial(array $bitFrame)
+    private static function serial(array $bitFrame)
     {
         $codeArr = [];
         
@@ -199,7 +205,7 @@ class QRmask
      * @param string $code
      * @return array<array<string>>
      */
-    public static function unserial(string $code):array
+    private static function unserial(string $code):array
     {
         $codeArr = [];
         
@@ -285,7 +291,7 @@ class QRmask
     }
     
     //----------------------------------------------------------------------
-    public function calcN1N3($length)
+    private function calcN1N3($length)
     {
         $demerit = 0;
         
@@ -322,7 +328,7 @@ class QRmask
     }
     
     //----------------------------------------------------------------------
-    public function evaluateSymbol($width, $frame)
+    private function evaluateSymbol($width, $frame)
     {
         $head    = 0;
         $demerit = 0;
@@ -459,6 +465,4 @@ class QRmask
         
         return $bestMask;
     }
-    
-    //----------------------------------------------------------------------
 }

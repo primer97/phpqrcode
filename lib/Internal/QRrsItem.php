@@ -28,7 +28,11 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-namespace primer\phpqrcode;
+namespace primer\phpqrcode\Internal;
+
+/**
+ * @internal
+ */
 class QRrsItem
 {
     
@@ -46,7 +50,7 @@ class QRrsItem
     public  int   $gfpoly;
     
     //----------------------------------------------------------------------
-    public function modnn(int $x):int
+    private function modnn(int $x):int
     {
         while($x >= $this->nn)
         {

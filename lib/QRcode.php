@@ -3,6 +3,13 @@
 namespace primer\phpqrcode;
 
 use Exception;
+use primer\phpqrcode\Internal\FrameFiller;
+use primer\phpqrcode\Internal\QRencode;
+use primer\phpqrcode\Internal\QRinput;
+use primer\phpqrcode\Internal\QRmask;
+use primer\phpqrcode\Internal\QRrawcode;
+use primer\phpqrcode\Internal\QRspec;
+use primer\phpqrcode\Internal\QRsplit;
 
 class QRcode
 {

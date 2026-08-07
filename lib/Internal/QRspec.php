@@ -31,9 +31,14 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-namespace primer\phpqrcode;
+namespace primer\phpqrcode\Internal;
 
 
+use primer\phpqrcode\QRConstants;
+
+/**
+ * @internal
+ */
 class QRspec
 {
  /** @var array<array{0:int, 1:int, 2:int, 3:array{0:int, 1:int, 2:int, 3:int} }> $capacity [version⇒[width, word, reminder, ec⇒[level0, level1, level2, level3]] */
@@ -88,7 +93,7 @@ class QRspec
     }
 
     //----------------------------------------------------------------------
-    public static function getECCLength(int $version, int $level):int
+    private static function getECCLength(int $version, int $level):int
     {
         return self::$capacity[$version][QRConstants::QRCAP_EC][$level];
     }
@@ -295,10 +300,10 @@ class QRspec
     /** --------------------------------------------------------------------
      * Put an alignment marker.
      * @param array<string> $frame
-     * @param int $ox center coordinate of the pattern
-     * @param int $oy center coordinate of the pattern
+     * @param int           $ox center coordinate of the pattern
+     * @param int           $oy center coordinate of the pattern
      */
-    public static function putAlignmentMarker(array &$frame, int $ox, int $oy):void
+    private static function putAlignmentMarker(array &$frame, int $ox, int $oy):void
     {
         $finder = [
                 "\xa1\xa1\xa1\xa1\xa1",
@@ -318,12 +323,12 @@ class QRspec
     }
 
     /**
-     * @param int $version
+     * @param int           $version
      * @param array<string> $frame
-     * @param int $width
+     * @param int           $width
      * @return void
      */
-    public static function putAlignmentPattern(int $version, array &$frame, int $width):void
+    private static function putAlignmentPattern(int $version, array &$frame, int $width):void
     {
         if($version < 2)
             return;
@@ -383,7 +388,7 @@ class QRspec
     ];
 
     //----------------------------------------------------------------------
-    public static function getVersionPattern(int $version):int
+    private static function getVersionPattern(int $version):int
     {
         if($version < 7 || $version > QRConstants::QRSPEC_VERSION_MAX)
             return 0;
@@ -423,10 +428,10 @@ class QRspec
     /** --------------------------------------------------------------------
      * Put a finder pattern.
      * @param array<string> $frame
-     * @param int $ox upper-left coordinate of the pattern
-     * @param int $oy upper-left coordinate of the pattern
+     * @param int           $ox upper-left coordinate of the pattern
+     * @param int           $oy upper-left coordinate of the pattern
      */
-    public static function putFinderPattern(array &$frame, int $ox, int $oy):void
+    private static function putFinderPattern(array &$frame, int $ox, int $oy):void
     {
         $finder = [
                 "\xc1\xc1\xc1\xc1\xc1\xc1\xc1",
@@ -448,7 +453,7 @@ class QRspec
      * @param int $version
      * @return array<string> frame[i]
      */
-    public static function createFrame(int $version):array
+    private static function createFrame(int $version):array
     {
         $width     = self::$capacity[$version][QRConstants::QRCAP_WIDTH];
         $frameLine = str_repeat("\0", $width);

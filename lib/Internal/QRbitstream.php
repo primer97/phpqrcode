@@ -25,7 +25,11 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-namespace primer\phpqrcode;
+namespace primer\phpqrcode\Internal;
+
+/**
+ * @internal
+ */
 class QRbitstream
 {
     /** @var array<int> $data  */
@@ -38,14 +42,14 @@ class QRbitstream
     }
     
     //----------------------------------------------------------------------
-    public function allocate(int $setLength):int
+    private function allocate(int $setLength):int
     {
         $this->data = array_fill(0, $setLength, 0);
         return 0;
     }
     
     //----------------------------------------------------------------------
-    public static function newFromNum(int $bits, int $num):QRbitstream
+    private static function newFromNum(int $bits, int $num):QRbitstream
     {
         $bstream = new QRbitstream();
         $bstream->allocate($bits);
@@ -73,7 +77,7 @@ class QRbitstream
      * @param array<int> $data
      * @return QRbitstream
      */
-    public static function newFromBytes(int $size, array $data):QRbitstream
+    private static function newFromBytes(int $size, array $data):QRbitstream
     {
         $bstream = new QRbitstream();
         $bstream->allocate($size*8);

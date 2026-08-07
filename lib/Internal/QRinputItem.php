@@ -25,10 +25,14 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-namespace primer\phpqrcode;
+namespace primer\phpqrcode\Internal;
 
 use Exception;
+use primer\phpqrcode\QRConstants;
 
+/**
+ * @internal
+ */
 class QRinputItem
 {
     /** @var int $mode */
@@ -68,7 +72,7 @@ class QRinputItem
     }
     
     //----------------------------------------------------------------------
-    public function encodeModeNum(int $version):int
+    private function encodeModeNum(int $version):int
     {
         try
         {
@@ -110,7 +114,7 @@ class QRinputItem
     }
     
     //----------------------------------------------------------------------
-    public function encodeModeAn(int $version):int
+    private function encodeModeAn(int $version):int
     {
         try
         {
@@ -144,7 +148,7 @@ class QRinputItem
     }
     
     //----------------------------------------------------------------------
-    public function encodeMode8(int $version):int
+    private function encodeMode8(int $version):int
     {
         try
         {
@@ -168,7 +172,7 @@ class QRinputItem
     }
     
     //----------------------------------------------------------------------
-    public function encodeModeKanji(int $version):int
+    private function encodeModeKanji(int $version):int
     {
         try
         {
@@ -206,7 +210,7 @@ class QRinputItem
     }
     
     //----------------------------------------------------------------------
-    public function encodeModeStructure():int
+    private function encodeModeStructure():int
     {
         try
         {
@@ -326,6 +330,3 @@ class QRinputItem
         }
     }
 }
-
-
-    

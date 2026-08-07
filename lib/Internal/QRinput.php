@@ -1,10 +1,14 @@
 <?php
 
-namespace primer\phpqrcode;
+namespace primer\phpqrcode\Internal;
 
 
 use Exception;
+use primer\phpqrcode\QRConstants;
 
+/**
+ * @internal
+ */
 class QRinput
 {
     /** @var array<QRinputItem> $items */
@@ -34,7 +38,7 @@ class QRinput
     }
     
     //----------------------------------------------------------------------
-    public function setVersion(int $version):void
+    private function setVersion(int $version):void
     {
         if($version < 0 || $version > QRConstants::QRSPEC_VERSION_MAX)
         {
@@ -64,7 +68,7 @@ class QRinput
     }
     
     //----------------------------------------------------------------------
-    public function appendEntry(QRinputItem $entry):void
+    private function appendEntry(QRinputItem $entry):void
     {
         $this->items[] = $entry;
     }
@@ -91,7 +95,7 @@ class QRinput
     
     //----------------------------------------------------------------------
     
-    public function insertStructuredAppendHeader(int $size, int $index,int $parity):int
+    private function insertStructuredAppendHeader(int $size, int $index, int $parity):int
     {
         if($size > QRConstants::MAX_STRUCTURED_SYMBOLS)
         {
@@ -117,7 +121,7 @@ class QRinput
     }
     
     //----------------------------------------------------------------------
-    public function calcParity()
+    private function calcParity()
     {
         $parity = 0;
         
@@ -137,11 +141,11 @@ class QRinput
     
     
     /**
-     * @param int   $size
+     * @param int           $size
      * @param array<string> $data
      * @return bool
      */
-    public static function checkModeNum(int $size, array $data):bool
+    private static function checkModeNum(int $size, array $data):bool
     {
         for($i = 0; $i < $size; $i++)
         {
@@ -196,11 +200,11 @@ class QRinput
     }
     
     /**
-     * @param int   $size
+     * @param int           $size
      * @param array<string> $data
      * @return bool
      */
-    public static function checkModeAn(int $size,array $data):bool
+    private static function checkModeAn(int $size, array $data):bool
     {
         for($i = 0; $i < $size; $i++)
         {
@@ -240,11 +244,11 @@ class QRinput
     }
     
     /**
-     * @param int   $size
+     * @param int           $size
      * @param array<string> $data
      * @return bool
      */
-    public static function checkModeKanji(int $size,array $data):bool
+    private static function checkModeKanji(int $size, array $data):bool
     {
         if($size & 1)
             return false;
@@ -297,7 +301,7 @@ class QRinput
     
     
     //----------------------------------------------------------------------
-    public function estimateBitStreamSize(int $version):int
+    private function estimateBitStreamSize(int $version):int
     {
         $bits = 0;
         
@@ -310,7 +314,7 @@ class QRinput
     }
     
     //----------------------------------------------------------------------
-    public function estimateVersion():int
+    private function estimateVersion():int
     {
         $version = 0;
         $prev    = 0;
@@ -329,7 +333,7 @@ class QRinput
     }
     
     //----------------------------------------------------------------------
-    public static function lengthOfCode(int $mode, int $version, int $bits):int
+    private static function lengthOfCode(int $mode, int $version, int $bits):int
     {
         $payload = $bits - 4 - QRspec::lengthIndicator($mode, $version);
         switch($mode)
@@ -376,7 +380,7 @@ class QRinput
     }
     
     //----------------------------------------------------------------------
-    public function createBitStream():int
+    private function createBitStream():int
     {
         $total = 0;
         
@@ -394,7 +398,7 @@ class QRinput
     }
     
     //----------------------------------------------------------------------
-    public function convertData():int
+    private function convertData():int
     {
         $ver = $this->estimateVersion();
         if($ver > $this->getVersion())
@@ -428,7 +432,7 @@ class QRinput
     }
     
     //----------------------------------------------------------------------
-    public function appendPaddingBit(QRbitstream &$bstream):int
+    private function appendPaddingBit(QRbitstream &$bstream):int
     {
         $bits     = $bstream->size();
         $maxwords = QRspec::getDataLength($this->version, $this->level);
@@ -480,7 +484,7 @@ class QRinput
      * @return QRbitstream|null
      * @throws Exception
      */
-    public function mergeBitStream()
+    private function mergeBitStream()
     {
         if($this->convertData() < 0)
         {
@@ -504,7 +508,7 @@ class QRinput
     /**
      * @return QRbitstream|null
      */
-    public function getBitStream()
+    private function getBitStream()
     {
         
         $bstream = $this->mergeBitStream();

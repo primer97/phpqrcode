@@ -1,9 +1,12 @@
 <?php
 
-namespace primer\phpqrcode;
+namespace primer\phpqrcode\Internal;
 
 use Exception;
 
+/**
+ * @internal
+ */
 class QRrawcode
 {
     public $version;
@@ -57,7 +60,7 @@ class QRrawcode
      * @param array<int> $spec
      * @return int
      */
-    public function init(array $spec):int
+    private function init(array $spec):int
     {
         $dl = QRspec::rsDataCodes1($spec);
         $el = QRspec::rsEccCodes1($spec);

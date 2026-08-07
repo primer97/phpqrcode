@@ -25,11 +25,19 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-namespace primer\phpqrcode;
+namespace primer\phpqrcode\Internal;
 
 
 use Exception;
+use primer\phpqrcode\QRcode;
+use primer\phpqrcode\QRConstants;
+use primer\phpqrcode\QRimage;
+use primer\phpqrcode\QRSettings;
+use primer\phpqrcode\QRtools;
 
+/**
+ * @internal
+ */
 class QRencode
 {
     
@@ -43,7 +51,7 @@ class QRencode
     public $level = QRConstants::QR_ECLEVEL_L;
     public $hint  = QRConstants::QR_MODE_8;
     
-    protected function isEightBit():bool
+    private function isEightBit():bool
     {
         return QRSettings::isForcedMode() &&
             ( QRSettings::getForcedMode() == QRConstants::QR_MODE_8
