@@ -172,7 +172,7 @@ class QRcode
     
     /**
      * @param string  $text          Text data to encode
-     * @param ?string $outfile       Png file to create, (can be null when false when sendToBrowser==true)
+     * @param ?string $outfile       Png file to create, (when null, no file written but sent to browser)
      * @param int     $level         Correction level {@see QRConstants::QR_ECLEVEL_L}, {@see QRConstants::QR_ECLEVEL_M}, {@see QRConstants::QR_ECLEVEL_Q}, {@see QRConstants::QR_ECLEVEL_H}
      * @param int     $size          Pixel size
      * @param int     $margin        Margin (silent zone)
