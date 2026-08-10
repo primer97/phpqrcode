@@ -1,3 +1,7 @@
+* 1.2.3 build 2026-08-10
+  no real changes,
+  for technical reasons I had to reload same package, version number must be increased.
+
 * 1.2.2 build 2026-08-05
   - feature allow force mode settings (numeric / alphanum, mode8, Kanji)
   - feature allow manipulate of mask options
