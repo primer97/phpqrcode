@@ -4,4 +4,8 @@ parameters:
     paths:
         - lib
 
+    excludePaths:
+        analyse:
+            - tests
+
     inferPrivatePropertyTypeFromConstructor: true
