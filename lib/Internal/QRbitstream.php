@@ -33,22 +33,18 @@ namespace primer\phpqrcode\Internal;
 class QRbitstream
 {
     /** @var array<int> $data  */
-    protected $data = [];
+    protected array $data = [];
     
-    //----------------------------------------------------------------------
     public function size():int
     {
         return count($this->data);
     }
     
-    //----------------------------------------------------------------------
-    private function allocate(int $setLength):int
+    private function allocate(int $setLength):void
     {
         $this->data = array_fill(0, $setLength, 0);
-        return 0;
     }
     
-    //----------------------------------------------------------------------
     private static function newFromNum(int $bits, int $num):QRbitstream
     {
         $bstream = new QRbitstream();
@@ -107,7 +103,7 @@ class QRbitstream
     
     /**
      * @param QRbitstream|null $arg -- todo check if null possible ?
-     * @return int
+     * @return int -1 on error, 0 otherwise
      */
     public function append(?QRbitstream $arg):int
     {
@@ -132,7 +128,6 @@ class QRbitstream
         return 0;
     }
     
-    //----------------------------------------------------------------------
     public function appendNum(int $bits, int $num):int
     {
         if($bits == 0)

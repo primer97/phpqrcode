@@ -10,8 +10,7 @@ class QRrs
     /** @var array<?QRrsItem> $items  */
     public static array $items = [];
     
-    //----------------------------------------------------------------------
-    public static function init_rs(int $symsize, int $gfpoly, int $fcr, int $prim, int $nroots, int $pad)
+    public static function init_rs(int $symsize, int $gfpoly, int $fcr, int $prim, int $nroots, int $pad):?QRrsItem
     {
         foreach(self::$items as $rs)
         {

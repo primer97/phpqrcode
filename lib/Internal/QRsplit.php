@@ -296,8 +296,7 @@ class QRsplit
         return $run;
     }
     
-    //----------------------------------------------------------------------
-    private function splitString()
+    private function splitString():int
     {
         while(strlen($this->dataStr) > 0)
         {
@@ -330,6 +329,8 @@ class QRsplit
             
             $this->dataStr = substr($this->dataStr, $length);
         }
+        //note was missing return , in fact we return no value, that act as valid (probably as expected), now returns 0
+        return 0;
     }
     
     //----------------------------------------------------------------------
@@ -359,7 +360,11 @@ class QRsplit
     }
     
     //----------------------------------------------------------------------
-    public static function splitStringToQRinput($string, QRinput $input, int $modeHint, bool $casesensitive = true)
+    
+    /**
+     * @throws Exception
+     */
+    public static function splitStringToQRinput($string, QRinput $input, int $modeHint, bool $casesensitive = true):int
     {
         if(is_null($string) || $string == '\0' || $string == '')
         {

@@ -9,25 +9,25 @@ use Exception;
  */
 class QRrawcode
 {
-    public $version;
+    public int $version;
     /** @var array<int> $datacode */
     public array $datacode = [];
     /** @var array<int> $ecccode  */
-    public $ecccode  = [];
-    /** @var int $blocks */
-    public $blocks;
-    /** @var array<int, QRrsblock >  */
-    public $rsblocks = [];
-    /** @var int $count */
-    public $count;
-    /** @var int $dataLength */
-    public $dataLength;
-    /** @var int  */
-    public $eccLength;
-    /** @var int $b1 */
-    public $b1;
+    public array $ecccode  = [];
     
-    //----------------------------------------------------------------------
+    public int $blocks;
+    
+    /** @var array<int, QRrsblock >  */
+    public array $rsblocks = [];
+    
+    public int $count;
+    public int $dataLength;
+    public int $eccLength;
+    public int $b1;
+    
+    /**
+     * @throws Exception
+     */
     public function __construct(QRinput $input)
     {
         $spec = [0, 0, 0, 0, 0];
@@ -90,7 +90,7 @@ class QRrawcode
         $el = QRspec::rsEccCodes2($spec);
         $rs = QRrs::init_rs(8, 0x11d, 0, 1, $el, 255 - $dl - $el);
         
-        if($rs == null) return -1;
+        if(is_null($rs)) return -1;
         
         for($i = 0; $i < QRspec::rsBlockNum2($spec); $i++)
         {
@@ -106,7 +106,6 @@ class QRrawcode
         return 0;
     }
     
-    //----------------------------------------------------------------------
     public function getCode()
     {
         if($this->count < $this->dataLength)

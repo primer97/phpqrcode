@@ -54,7 +54,7 @@ class FrameFiller
     /**
      * @return array{'x':int,'y':int}|null Next position
      */
-    public function next()
+    public function next():?array
     {
         do
         {

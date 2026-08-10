@@ -12,14 +12,14 @@ use primer\phpqrcode\QRConstants;
 class QRinput
 {
     /** @var array<QRinputItem> $items */
-    public $items;
+    public array $items;
     
-    /** @var int $version */
-    private $version;
-    /** @var int $level */
-    private $level;
+    private int $version;
+    private int $level;
     
-    //----------------------------------------------------------------------
+    /**
+     * @throws Exception
+     */
     public function __construct(int $version = 0, int $level = QRConstants::QR_ECLEVEL_L)
     {
         if($version < 0 || $version > QRConstants::QRSPEC_VERSION_MAX || $level > QRConstants::QR_ECLEVEL_H)
@@ -31,13 +31,14 @@ class QRinput
         $this->level   = $level;
     }
     
-    //----------------------------------------------------------------------
     public function getVersion():int
     {
         return $this->version;
     }
     
-    //----------------------------------------------------------------------
+    /**
+     * @throws Exception
+     */
     private function setVersion(int $version):void
     {
         if($version < 0 || $version > QRConstants::QRSPEC_VERSION_MAX)
@@ -48,13 +49,14 @@ class QRinput
         $this->version = $version;
     }
     
-    //----------------------------------------------------------------------
     public function getErrorCorrectionLevel():int
     {
         return $this->level;
     }
     
-    //----------------------------------------------------------------------
+    /**
+     * @throws Exception
+     */
     public function setErrorCorrectionLevel(int $level):int
     {
         if($level > QRConstants::QR_ECLEVEL_H)
@@ -67,7 +69,6 @@ class QRinput
         return 0;
     }
     
-    //----------------------------------------------------------------------
     private function appendEntry(QRinputItem $entry):void
     {
         $this->items[] = $entry;
@@ -93,8 +94,10 @@ class QRinput
         }
     }
     
-    //----------------------------------------------------------------------
     
+    /**
+     * @throws Exception
+     */
     private function insertStructuredAppendHeader(int $size, int $index, int $parity):int
     {
         if($size > QRConstants::MAX_STRUCTURED_SYMBOLS)
@@ -120,8 +123,7 @@ class QRinput
         }
     }
     
-    //----------------------------------------------------------------------
-    private function calcParity()
+    private function calcParity():int
     {
         $parity = 0;
         
@@ -158,7 +160,6 @@ class QRinput
         return true;
     }
     
-    //----------------------------------------------------------------------
     public static function estimateBitsModeNum(int $size):int
     {
         $w    = (int)$size/3;
@@ -182,7 +183,7 @@ class QRinput
     /**
      * @var array<int> $anTable
      */
-    protected static $anTable = [
+    protected static array $anTable = [
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
         36, -1, -1, -1, 37, 38, -1, -1, -1, -1, 39, 40, -1, 41, 42, 43,
@@ -217,7 +218,6 @@ class QRinput
         return true;
     }
     
-    //----------------------------------------------------------------------
     public static function estimateBitsModeAn(int $size):int
     {
         $w    = (int)($size/2);
@@ -231,13 +231,11 @@ class QRinput
         return $bits;
     }
     
-    //----------------------------------------------------------------------
     public static function estimateBitsMode8(int $size):int
     {
         return $size*8;
     }
     
-    //----------------------------------------------------------------------
     public static function estimateBitsModeKanji(int $size):int
     {
         return (int)(($size/2)*13);
@@ -288,7 +286,6 @@ class QRinput
             case QRConstants::QR_MODE_KANJI:
                 return self::checkModeKanji($size, $data);
             case QRConstants::QR_MODE_8:
-                return true;
             case QRConstants::QR_MODE_STRUCTURE:
                 return true;
             
@@ -300,7 +297,6 @@ class QRinput
     }
     
     
-    //----------------------------------------------------------------------
     private function estimateBitStreamSize(int $version):int
     {
         $bits = 0;
@@ -313,11 +309,9 @@ class QRinput
         return $bits;
     }
     
-    //----------------------------------------------------------------------
     private function estimateVersion():int
     {
         $version = 0;
-        $prev    = 0;
         do
         {
             $prev    = $version;
@@ -332,7 +326,6 @@ class QRinput
         return $version;
     }
     
-    //----------------------------------------------------------------------
     private static function lengthOfCode(int $mode, int $version, int $bits):int
     {
         $payload = $bits - 4 - QRspec::lengthIndicator($mode, $version);
@@ -359,13 +352,11 @@ class QRinput
                     $size++;
                 break;
             case QRConstants::QR_MODE_8:
+            case QRConstants::QR_MODE_STRUCTURE:
                 $size = (int)($payload/8);
                 break;
             case QRConstants::QR_MODE_KANJI:
                 $size = (int)(($payload/13)*2);
-                break;
-            case QRConstants::QR_MODE_STRUCTURE:
-                $size = (int)($payload/8);
                 break;
             default:
                 $size = 0;
@@ -379,7 +370,6 @@ class QRinput
         return $size;
     }
     
-    //----------------------------------------------------------------------
     private function createBitStream():int
     {
         $total = 0;
@@ -397,7 +387,9 @@ class QRinput
         return $total;
     }
     
-    //----------------------------------------------------------------------
+    /**
+     * @throws Exception
+     */
     private function convertData():int
     {
         $ver = $this->estimateVersion();
@@ -431,7 +423,6 @@ class QRinput
         return 0;
     }
     
-    //----------------------------------------------------------------------
     private function appendPaddingBit(QRbitstream &$bstream):int
     {
         $bits     = $bstream->size();
@@ -484,11 +475,11 @@ class QRinput
      * @return QRbitstream|null
      * @throws Exception
      */
-    private function mergeBitStream()
+    private function mergeBitStream(): ?QRbitstream
     {
         if($this->convertData() < 0)
         {
-            return null;
+            return null; //todo check possible case ?
         }
         
         $bstream = new QRbitstream();
@@ -507,13 +498,14 @@ class QRinput
     
     /**
      * @return QRbitstream|null
+     * @throws Exception
      */
-    private function getBitStream()
+    private function getBitStream():?QRbitstream
     {
         
         $bstream = $this->mergeBitStream();
         
-        if($bstream == null)
+        if(is_null($bstream)) //todo check null possible ?
         {
             return null;
         }
@@ -529,6 +521,7 @@ class QRinput
     
     /**
      * @return array<int>|null
+     * @throws Exception
      */
     public function getByteStream():?array
     {

@@ -35,23 +35,19 @@ use primer\phpqrcode\QRConstants;
  */
 class QRinputItem
 {
-    /** @var int $mode */
-    public $mode;
-    /** @var int $size */
-    public $size;
+    public int $mode;
+    public int $size;
     /** @var array<string> $data */
-    public $data;
-    /** @var QRbitstream|null $bstream */
-    public $bstream;
+    public array $data;
+    public QRbitstream $bstream;
     
     /**
      * @param int   $mode
      * @param int   $size
      * @param array<string> $data
-     * @param ?QRbitstream  $bstream
      * @throws Exception
      */
-    public function __construct(int $mode, int $size, array $data, $bstream = null)
+    public function __construct(int $mode, int $size, array $data)
     {
         $setData = array_slice($data, 0, $size);
         
@@ -68,7 +64,6 @@ class QRinputItem
         $this->mode    = $mode;
         $this->size    = $size;
         $this->data    = $setData;
-        $this->bstream = $bstream;
     }
     
     //----------------------------------------------------------------------
@@ -113,7 +108,6 @@ class QRinputItem
         }
     }
     
-    //----------------------------------------------------------------------
     private function encodeModeAn(int $version):int
     {
         try
@@ -126,8 +120,8 @@ class QRinputItem
             
             for($i = 0; $i < $words; $i++)
             {
-                $val = (int)QRinput::lookAnTable(ord($this->data[$i*2]))*45;
-                $val += (int)QRinput::lookAnTable(ord($this->data[$i*2 + 1]));
+                $val = QRinput::lookAnTable(ord($this->data[$i*2]))*45;
+                $val += QRinput::lookAnTable(ord($this->data[$i*2 + 1]));
                 
                 $bs->appendNum(11, $val);
             }
@@ -147,7 +141,6 @@ class QRinputItem
         }
     }
     
-    //----------------------------------------------------------------------
     private function encodeMode8(int $version):int
     {
         try
@@ -171,7 +164,6 @@ class QRinputItem
         }
     }
     
-    //----------------------------------------------------------------------
     private function encodeModeKanji(int $version):int
     {
         try
@@ -209,7 +201,6 @@ class QRinputItem
         }
     }
     
-    //----------------------------------------------------------------------
     private function encodeModeStructure():int
     {
         try
@@ -230,7 +221,6 @@ class QRinputItem
         }
     }
     
-    //----------------------------------------------------------------------
     public function estimateBitStreamSizeOfEntry(int $version):int
     {
         if($version == 0)
@@ -265,7 +255,6 @@ class QRinputItem
         return $bits;
     }
     
-    //----------------------------------------------------------------------
     public function encodeBitStream(int $version):int
     {
         try

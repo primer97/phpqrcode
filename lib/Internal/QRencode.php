@@ -41,15 +41,15 @@ use primer\phpqrcode\QRtools;
 class QRencode
 {
     
-    public $casesensitive = true;
+    public bool $casesensitive = true; //todo create a settings ?
     
-    public $version = 0;
-    public $size    = 3;
-    public $margin  = 4;
+    public int $version = 0;
+    public int $size    = 3;
+    public int $margin  = 4;
     
     /** @var int $level error correction level 0 to 3 */
-    public $level = QRConstants::QR_ECLEVEL_L;
-    public $hint  = QRConstants::QR_MODE_8;
+    public int $level = QRConstants::QR_ECLEVEL_L;
+    public int $hint  = QRConstants::QR_MODE_8;
     
     private function isEightBit():bool
     {
@@ -86,8 +86,10 @@ class QRencode
         return $enc;
     }
     
-    //----------------------------------------------------------------------
-    public function encodeRAW($intext, ?string $outfile = null):array
+    /**
+     * @throws Exception
+     */
+    public function encodeRAW(string $intext):array
     {
         $code = new QRcode();
         
@@ -106,7 +108,7 @@ class QRencode
     /**
      * @param string $intext
      * @param ?string   $outfile
-     * @return array|void
+     * @return array<string>|void
      * @throws Exception
      */
     public function encode(string $intext, ?string $outfile = null) //void|array
@@ -132,7 +134,16 @@ class QRencode
         }
     }
     
-    //----------------------------------------------------------------------
+    /**
+     * @param array<string> $tab
+     * @return int
+     */
+    private function getRealPointSize(array $tab):int
+    {
+        $maxSize = (int)(QRConstants::QR_PNG_MAXIMUM_SIZE/(count($tab) + 2*$this->margin));
+        return min(max(1, $this->size), $maxSize);
+    }
+
     public function encodePNG(string $intext, ?string $outfile = null, bool $sendToBrowser = false):void
     {
         try
@@ -146,9 +157,7 @@ class QRencode
             if($err != '')
                 QRtools::log($outfile, $err);
             
-            $maxSize = (int)(QRConstants::QR_PNG_MAXIMUM_SIZE/(count($tab) + 2*$this->margin));
-            
-            QRimage::png($tab, $outfile, min(max(1, $this->size), $maxSize), $this->margin, $sendToBrowser);
+            QRimage::png($tab, $outfile, $this->getRealPointSize($tab), $this->margin, $sendToBrowser);
             
         } catch(Exception $e)
         {
@@ -171,9 +180,7 @@ class QRencode
             if($err != '')
                 QRtools::log($outfile, $err);
             
-            $maxSize = (int)(QRConstants::QR_PNG_MAXIMUM_SIZE/(count($tab) + 2*$this->margin));
-            
-            QRimage::jpg($tab, $outfile, min(max(1, $this->size), $maxSize), $this->margin,$jpgQual);
+            QRimage::jpg($tab, $outfile, $this->getRealPointSize($tab), $this->margin,$jpgQual);
         } catch(Exception $e)
         {
             

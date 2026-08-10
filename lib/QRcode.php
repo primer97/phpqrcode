@@ -15,7 +15,7 @@ class QRcode
 {
     public int $version;
     public int $width;
-    /** @var array<array<int>> $data */
+    /** @var array<string> $data */
     public array $data;
     
     /**
@@ -93,7 +93,7 @@ class QRcode
             $masked = $maskObj->makeMask($width, $frame, $maskNo, $input->getErrorCorrectionLevel());
         }
         
-        if($masked == null) // possible ? todo check
+        if(is_null($masked)) // possible ? todo check
         {
             return null;
         }
@@ -124,7 +124,7 @@ class QRcode
      */
     public function encodeString8bit(?string $string, int $version, int $level):?self
     {
-        if($string == null)
+        if(is_null($string))
         {
             throw new Exception('empty string!');
         }
@@ -193,10 +193,10 @@ class QRcode
     }
     
     //----------------------------------------------------------------------
-    public static function raw($text, ?string $outfile = null, int $level = QRConstants::QR_ECLEVEL_L, int $size = 3, int $margin = 4)
+    public static function raw(string $text, ?string $outfile = null, int $level = QRConstants::QR_ECLEVEL_L, int $size = 3, int $margin = 4):array
     {
         $enc = QRencode::factory($level, $size, $margin);
-        return $enc->encodeRAW($text, $outfile);
+        return $enc->encodeRAW($text);
     }
     
     /**

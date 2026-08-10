@@ -40,8 +40,10 @@ class QRrsItem
     public  int   $nn;                  // Symbols per block (= (1<<mm)-1)
     /** @var array<int> $alpha_to log lookup table */
     private array $alpha_to = [];
-    private array $index_of = [];  // Antilog lookup table
-    private array $genpoly  = [];   // Generator polynomial
+    /** @var array<int> $index_of Antilog lookup table */
+    private array $index_of = [];
+    /** @var array<int> $genpoly Generator polynomial */
+    private array $genpoly  = [];
     public  int   $nroots;              // Number of generator roots = number of parity symbols
     public  int   $fcr;                 // First consecutive root, index form
     public  int   $prim;                // Primitive element, index form
@@ -49,7 +51,6 @@ class QRrsItem
     public  int   $pad;                 // Padding bytes in shortened block
     public  int   $gfpoly;
     
-    //----------------------------------------------------------------------
     private function modnn(int $x):int
     {
         while($x >= $this->nn)
@@ -61,21 +62,18 @@ class QRrsItem
         return $x;
     }
     
-    //----------------------------------------------------------------------
     public static function init_rs_char(int $symsize, int $gfpoly, int $fcr, int $prim, int $nroots, int $pad):?QRrsItem
     {
         // Common code for intializing a Reed-Solomon control block (char or int symbols)
         // Copyright 2004 Phil Karn, KA9Q
         // May be used under the terms of the GNU Lesser General Public License (LGPL)
         
-        $rs = null;
-        
         // Check parameter ranges
-        if($symsize < 0 || $symsize > 8) return $rs;
-        if($fcr < 0 || $fcr >= (1 << $symsize)) return $rs;
-        if($prim <= 0 || $prim >= (1 << $symsize)) return $rs;
-        if($nroots < 0 || $nroots >= (1 << $symsize)) return $rs; // Can't have more roots than symbol values!
-        if($pad < 0 || $pad >= ((1 << $symsize) - 1 - $nroots)) return $rs; // Too much padding
+        if($symsize < 0 || $symsize > 8) return null;
+        if($fcr < 0 || $fcr >= (1 << $symsize)) return null;
+        if($prim <= 0 || $prim >= (1 << $symsize)) return null;
+        if($nroots < 0 || $nroots >= (1 << $symsize)) return null; // Can't have more roots than symbol values!
+        if($pad < 0 || $pad >= ((1 << $symsize) - 1 - $nroots)) return null; // Too much padding
         
         $rs      = new QRrsItem();
         $rs->mm  = $symsize;
@@ -109,8 +107,7 @@ class QRrsItem
         if($sr != 1)
         {
             // field generator polynomial is not primitive!
-            $rs = null;
-            return $rs;
+            return null;
         }
         
         /* Form RS code generator polynomial from its roots */

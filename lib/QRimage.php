@@ -28,7 +28,7 @@ class QRimage
 {
     
     /**
-     * @param array<array<string>> $frame
+     * @param array<string> $frame [["000111001010"...]]
      * @param string|null $filename
      * @param int         $pixelPerPoint
      * @param int         $outerFrame
@@ -63,7 +63,7 @@ class QRimage
     
     
     /**
-     * @param array<array<string>>  $frame
+     * @param array<string> $frame
      * @param string|null $filename
      * @param int         $pixelPerPoint
      * @param int         $outerFrame
@@ -88,7 +88,7 @@ class QRimage
     }
     
     /**
-     * @param array $frame
+     * @param array<string> $frame [["000111001010"...]]
      * @param int   $pixelPerPoint
      * @param int   $outerFrame
      * @return false|\GdImage

@@ -32,8 +32,8 @@ class QRtools
 {
     
     /**
-     * @param array<array<string>> $frame
-     * @return array<array<string>>
+     * @param array<string> $frame
+     * @return array<string>
      */
     public static function binarize(array $frame):array
     {

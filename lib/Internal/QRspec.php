@@ -42,7 +42,7 @@ use primer\phpqrcode\QRConstants;
 class QRspec
 {
  /** @var array<array{0:int, 1:int, 2:int, 3:array{0:int, 1:int, 2:int, 3:int} }> $capacity [version⇒[width, word, reminder, ec⇒[level0, level1, level2, level3]] */
-    protected static $capacity = [
+    protected static array $capacity = [
             [0, 0, 0, [0, 0, 0, 0]],
             [21, 26, 0, [7, 10, 13, 17]], // 1
             [25, 44, 7, [10, 16, 22, 28]],
@@ -129,7 +129,7 @@ class QRspec
     /**
      * @var array<array{0:int, 1:int, 2:int}> $lengthTableBits [mode⇒[ lengths ]]
      */
-    protected static $lengthTableBits = [
+    protected static array $lengthTableBits = [
             [10, 12, 14],
             [9, 11, 13],
             [8, 16, 16],
@@ -192,7 +192,7 @@ class QRspec
     // Table of the error correction code (Reed-Solomon block)
     // See Table 12-16 (pp.30-36), JIS X0510:2004.
 /** @var array<array{0:array{int,int}, 1:array{int,int}, 2:array{int,int}, 3:array{int,int}}> $eccTable [version⇒[level⇒[par1, par2]] : Error correction code table (Reed-Solomon block) - See Table 12-16 (pp.30-36), JIS X0510:2004. */
-    protected static $eccTable = [
+    protected static array $eccTable = [
             [[0, 0], [0, 0], [0, 0], [0, 0]],
             [[1, 0], [1, 0], [1, 0], [1, 0]], // 1
             [[1, 0], [1, 0], [1, 0], [1, 0]],
@@ -284,7 +284,7 @@ class QRspec
 
     // See Table 1 in Appendix E (pp.71) of JIS X0510:2004.
     /** @var array<array<int>> $alignmentPattern [version ⇒ [ x:int, y:int]] Position of alignment pattern, This array includes only the 2nd and 3rd position of aligment. Rest of them can be calculated from the distance between them. See Table 1 in Appendix E (pp.71) of JIS X0510:2004.*/
-    protected static $alignmentPattern = [
+    protected static array $alignmentPattern = [
             [0, 0],
             [0, 0], [18, 0], [22, 0], [26, 0], [30, 0], // 1- 5
             [34, 0], [22, 38], [24, 42], [26, 46], [28, 50], // 6-10
@@ -379,7 +379,7 @@ class QRspec
 
     // size: [QRSPEC_VERSION_MAX - 6]
     /** @var array<int> $versionPattern [version⇒int] Version information pattern (BCH coded). See Table 1 in Appendix D (pp.68) of JIS X0510:2004. size: [QRSPEC_VERSION_MAX - 6]*/
-    protected static $versionPattern = [
+    protected static array $versionPattern = [
             0x07c94, 0x085bc, 0x09a99, 0x0a4d3, 0x0bbf6, 0x0c762, 0x0d847, 0x0e60d,
             0x0f928, 0x10b78, 0x1145d, 0x12a17, 0x13532, 0x149a6, 0x15683, 0x168c9,
             0x177ec, 0x18ec4, 0x191e1, 0x1afab, 0x1b08e, 0x1cc1a, 0x1d33f, 0x1ed75,
@@ -400,7 +400,7 @@ class QRspec
     // See calcFormatInfo in tests/test_qrspec.c (orginal qrencode c lib)
 
     /** @var array<array<int>> $formatInfo Format information [ level ⇒ [ mask => int ] ]  */
-    protected static $formatInfo = [
+    protected static array $formatInfo = [
             [0x77c4, 0x72f3, 0x7daa, 0x789d, 0x662f, 0x6318, 0x6c41, 0x6976],
             [0x5412, 0x5125, 0x5e7c, 0x5b4b, 0x45f9, 0x40ce, 0x4f97, 0x4aa0],
             [0x355f, 0x3068, 0x3f31, 0x3a06, 0x24b4, 0x2183, 0x2eda, 0x2bed],
@@ -634,7 +634,7 @@ class QRspec
      * @param int $version
      * @return null|array<string>
      */
-    public static function newFrame(int $version)
+    public static function newFrame(int $version):?array
     {
         if($version < 1 || $version > QRConstants::QRSPEC_VERSION_MAX)
             return null;

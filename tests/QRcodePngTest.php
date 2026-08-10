@@ -26,6 +26,12 @@ class QRcodePngTest extends TestCase
         $this->assertTrue(file_exists($file));
     }
     
+//    public function testBuildEmptyData()
+//    {
+//        $file=self::buildPath('null');
+//        QRcode::png("",$file);
+//        $this->assertFalse(file_exists($file)); // silently fails, shall we report an issue ?
+//    }
 //region check QR content
     public function testReadNumericECLow()
     {
