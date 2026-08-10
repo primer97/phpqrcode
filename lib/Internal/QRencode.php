@@ -157,4 +157,29 @@ class QRencode
             
         }
     }
+    
+    public function encodeJPG(string $intext, ?string $outfile = null, int $jpgQual=85):void
+    {
+        try
+        {
+            
+            ob_start();
+            $tab = $this->encode($intext); //todo it may raise an Exception here (empty string) then ob_end_clean() is not proceeded. we have to fix that.
+            $err = ob_get_contents();
+            ob_end_clean();
+            
+            if($err != '')
+                QRtools::log($outfile, $err);
+            
+            $maxSize = (int)(QRConstants::QR_PNG_MAXIMUM_SIZE/(count($tab) + 2*$this->margin));
+            
+            QRimage::jpg($tab, $outfile, min(max(1, $this->size), $maxSize), $this->margin,$jpgQual);
+        } catch(Exception $e)
+        {
+            
+            QRtools::log($outfile, $e->getMessage());
+            
+        }
+    }
+    
 }

@@ -198,4 +198,19 @@ class QRcode
         $enc = QRencode::factory($level, $size, $margin);
         return $enc->encodeRAW($text, $outfile);
     }
+    
+    /**
+     * @param string  $text    Text data to encode
+     * @param ?string $outfile Png file to create, (can be null when false when sendToBrowser==true)
+     * @param int     $level   Correction level {@see QRConstants::QR_ECLEVEL_L}, {@see QRConstants::QR_ECLEVEL_M}, {@see QRConstants::QR_ECLEVEL_Q}, {@see QRConstants::QR_ECLEVEL_H}
+     * @param int     $size    Pixel size
+     * @param int     $margin  Margin (silent zone)
+     * @param int     $qual    jpeg quality (higher is better, max 100)
+     * @return void
+     */
+    public static function jpg(string $text, ?string $outfile = null, int $level = QRConstants::QR_ECLEVEL_L, int $size = 5, int $margin = 5, int $qual=85):void
+    {
+        $enc = QRencode::factory($level, $size, $margin);
+        $enc->encodeJPG($text, $outfile, min(max($qual,0),100));
+    }
 }
