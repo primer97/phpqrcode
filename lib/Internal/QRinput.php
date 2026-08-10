@@ -530,10 +530,10 @@ class QRinput
     /**
      * @return array<int>|null
      */
-    public function getByteStream()
+    public function getByteStream():?array
     {
         $bstream = $this->getBitStream();
-        if($bstream == null)
+        if(is_null($bstream))
         {
             return null;
         }

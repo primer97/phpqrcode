@@ -140,10 +140,6 @@ class QRbitstream
         
         $b = QRbitstream::newFromNum($bits, $num);
         
-//        if(is_null($b)) can't be null
-//            return -1;
-        assert( !is_null($b)); //todo check if we need that assertion ?
-        
         $ret = $this->append($b);
         unset($b);
         
@@ -162,10 +158,6 @@ class QRbitstream
             return 0;
         
         $b = QRbitstream::newFromBytes($size, $data);
-        
-//        if(is_null($b)) can't be null
-//            return -1;
-        assert( !is_null($b)); //todo check if we need that assertion ?
         
         $ret = $this->append($b);
         unset($b);

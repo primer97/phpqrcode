@@ -10,8 +10,8 @@ use Exception;
 class QRrawcode
 {
     public $version;
-    /** @var array<int>|null $datacode */
-    public $datacode = [];
+    /** @var array<int> $datacode */
+    public array $datacode = [];
     /** @var array<int> $ecccode  */
     public $ecccode  = [];
     /** @var int $blocks */
@@ -32,11 +32,12 @@ class QRrawcode
     {
         $spec = [0, 0, 0, 0, 0];
         
-        $this->datacode = $input->getByteStream(); //todo : do not store into $this->datacode when null
-        if(is_null($this->datacode))
+        $datacode = $input->getByteStream();
+        if(is_null($datacode))
         {
             throw new Exception('null input string');
         }
+        $this->datacode=$datacode;
         
         QRspec::getEccSpec($input->getVersion(), $input->getErrorCorrectionLevel(), $spec);
         
@@ -70,7 +71,7 @@ class QRrawcode
         $blockNo = 0;
         $dataPos = 0;
         $eccPos  = 0;
-        if(is_null($this->datacode)) return -1; // todo remove as soon as null is not allowed
+        
         for($i = 0; $i < QRspec::rsBlockNum1($spec); $i++)
         {
             $ecc                      = array_slice($this->ecccode, $eccPos);
@@ -90,7 +91,7 @@ class QRrawcode
         $rs = QRrs::init_rs(8, 0x11d, 0, 1, $el, 255 - $dl - $el);
         
         if($rs == null) return -1;
-        if(is_null($this->datacode)) return -1; // todo remove as soon as null is not allowed
+        
         for($i = 0; $i < QRspec::rsBlockNum2($spec); $i++)
         {
             $ecc                      = array_slice($this->ecccode, $eccPos);
