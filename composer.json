@@ -34,9 +34,15 @@
     }
   },
   "require-dev": {
-    "phpunit/phpunit": "~8.5.0",
+    "phpunit/phpunit": "^8.5",
+    "php-mock/php-mock-phpunit": "^2.15",
     "thiagolp90/qr-reader": "~1",
     "phpstan/phpstan": "^2.2",
-    "php-mock/php-mock-phpunit": "^2.15"
+    "nunomaduro/phpinsights": "^2.5"
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
   }
 }
