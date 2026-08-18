@@ -31,20 +31,22 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-namespace primer\phpqrcode;
+namespace primer\phpqrcode\Internal;
 
 
 use Exception;
+use primer\phpqrcode\QRConstants;
+use primer\phpqrcode\QRSettings;
 
+/**
+ * @internal
+ */
 class QRsplit
 {
     
-    /** @var string $dataStr */
-    public $dataStr = '';
-    /** @var QRinput $input */
-    public $input;
-    /** @var int $modeHint */
-    public $modeHint;
+    private string $dataStr = '';
+    private QRinput $input;
+    private int $modeHint;
     
     //----------------------------------------------------------------------
     public function __construct(string $dataStr, QRinput $input, int $modeHint)
@@ -55,7 +57,7 @@ class QRsplit
     }
     
     //----------------------------------------------------------------------
-    public static function isdigitat(string $str, int $pos):bool
+    private static function isdigitat(string $str, int $pos):bool
     {
         if($pos >= strlen($str))
             return false;
@@ -64,7 +66,7 @@ class QRsplit
     }
     
     //----------------------------------------------------------------------
-    public static function isalnumat(string $str, int $pos):bool
+    private static function isalnumat(string $str, int $pos):bool
     {
         if($pos >= strlen($str))
             return false;
@@ -73,7 +75,7 @@ class QRsplit
     }
     
     //----------------------------------------------------------------------
-    public function identifyMode(int $pos):int
+    private function identifyMode(int $pos):int
     {
         if($pos >= strlen($this->dataStr))
             return QRConstants::QR_MODE_NUL;
@@ -109,7 +111,7 @@ class QRsplit
     }
     
     //----------------------------------------------------------------------
-    public function eatNum():int
+    private function eatNum():int
     {
         $ln = QRspec::lengthIndicator(QRConstants::QR_MODE_NUM, $this->input->getVersion());
         
@@ -151,7 +153,7 @@ class QRsplit
     }
     
     //----------------------------------------------------------------------
-    public function eatAn():int
+    private function eatAn():int
     {
         $la = QRspec::lengthIndicator(QRConstants::QR_MODE_AN, $this->input->getVersion());
         $ln = QRspec::lengthIndicator(QRConstants::QR_MODE_NUM, $this->input->getVersion());
@@ -208,7 +210,7 @@ class QRsplit
     }
     
     //----------------------------------------------------------------------
-    public function eatKanji():int
+    private function eatKanji():int
     {
         $p = 0;
         
@@ -225,7 +227,7 @@ class QRsplit
     }
     
     //----------------------------------------------------------------------
-    public function eat8():int
+    private function eat8():int
     {
         $la = QRspec::lengthIndicator(QRConstants::QR_MODE_AN, $this->input->getVersion());
         $ln = QRspec::lengthIndicator(QRConstants::QR_MODE_NUM, $this->input->getVersion());
@@ -294,8 +296,7 @@ class QRsplit
         return $run;
     }
     
-    //----------------------------------------------------------------------
-    public function splitString()
+    private function splitString():int
     {
         while(strlen($this->dataStr) > 0)
         {
@@ -328,10 +329,12 @@ class QRsplit
             
             $this->dataStr = substr($this->dataStr, $length);
         }
+        //note was missing return , in fact we return no value, that act as valid (probably as expected), now returns 0
+        return 0;
     }
     
     //----------------------------------------------------------------------
-    public function toUpper():string
+    private function toUpper():string
     {
         $stringLen = strlen($this->dataStr);
         $p         = 0;
@@ -357,7 +360,11 @@ class QRsplit
     }
     
     //----------------------------------------------------------------------
-    public static function splitStringToQRinput($string, QRinput $input, int $modeHint, bool $casesensitive = true)
+    
+    /**
+     * @throws Exception
+     */
+    public static function splitStringToQRinput($string, QRinput $input, int $modeHint, bool $casesensitive = true):int
     {
         if(is_null($string) || $string == '\0' || $string == '')
         {

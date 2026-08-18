@@ -1,39 +1,43 @@
 <?php
 
-namespace primer\phpqrcode;
+namespace primer\phpqrcode\Internal;
 
 use Exception;
 
+/**
+ * @internal
+ */
 class QRrawcode
 {
-    public $version;
-    /** @var array<int>|null $datacode */
-    public $datacode = [];
+    public int $version;
+    /** @var array<int> $datacode */
+    public array $datacode = [];
     /** @var array<int> $ecccode  */
-    public $ecccode  = [];
-    /** @var int $blocks */
-    public $blocks;
-    /** @var array<int, QRrsblock >  */
-    public $rsblocks = [];
-    /** @var int $count */
-    public $count;
-    /** @var int $dataLength */
-    public $dataLength;
-    /** @var int  */
-    public $eccLength;
-    /** @var int $b1 */
-    public $b1;
+    public array $ecccode  = [];
     
-    //----------------------------------------------------------------------
+    public int $blocks;
+    
+    /** @var array<int, QRrsblock >  */
+    public array $rsblocks = [];
+    
+    public int $count;
+    public int $dataLength;
+    public int $eccLength;
+    public int $b1;
+    
+    /**
+     * @throws Exception
+     */
     public function __construct(QRinput $input)
     {
         $spec = [0, 0, 0, 0, 0];
         
-        $this->datacode = $input->getByteStream(); //todo : do not store into $this->datacode when null
-        if(is_null($this->datacode))
+        $datacode = $input->getByteStream();
+        if(is_null($datacode))
         {
             throw new Exception('null input string');
         }
+        $this->datacode=$datacode;
         
         QRspec::getEccSpec($input->getVersion(), $input->getErrorCorrectionLevel(), $spec);
         
@@ -57,7 +61,7 @@ class QRrawcode
      * @param array<int> $spec
      * @return int
      */
-    public function init(array $spec):int
+    private function init(array $spec):int
     {
         $dl = QRspec::rsDataCodes1($spec);
         $el = QRspec::rsEccCodes1($spec);
@@ -67,7 +71,7 @@ class QRrawcode
         $blockNo = 0;
         $dataPos = 0;
         $eccPos  = 0;
-        if(is_null($this->datacode)) return -1; // todo remove as soon as null is not allowed
+        
         for($i = 0; $i < QRspec::rsBlockNum1($spec); $i++)
         {
             $ecc                      = array_slice($this->ecccode, $eccPos);
@@ -86,8 +90,8 @@ class QRrawcode
         $el = QRspec::rsEccCodes2($spec);
         $rs = QRrs::init_rs(8, 0x11d, 0, 1, $el, 255 - $dl - $el);
         
-        if($rs == null) return -1;
-        if(is_null($this->datacode)) return -1; // todo remove as soon as null is not allowed
+        if(is_null($rs)) return -1;
+        
         for($i = 0; $i < QRspec::rsBlockNum2($spec); $i++)
         {
             $ecc                      = array_slice($this->ecccode, $eccPos);
@@ -102,7 +106,6 @@ class QRrawcode
         return 0;
     }
     
-    //----------------------------------------------------------------------
     public function getCode()
     {
         if($this->count < $this->dataLength)

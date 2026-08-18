@@ -25,12 +25,18 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-namespace primer\phpqrcode;
+namespace primer\phpqrcode\Internal;
 
+use primer\phpqrcode\QRConstants;
+use primer\phpqrcode\QRSettings;
+
+/**
+ * @internal
+ */
 class QRmask
 {
-    /** @var array{0:int, 1:int, 177:int} $runLength [ 0=>0, 1=>0, 2=>0 ... 177=>0] */
-    public $runLength = [];
+    /** @var array<int> $runLength [ 0=>0, 1=>0, 2=>0 ... 177=>0] */
+    private array $runLength = [];
     
     //----------------------------------------------------------------------
     public function __construct()
@@ -38,16 +44,15 @@ class QRmask
         $this->runLength = array_fill(0, QRConstants::QRSPEC_WIDTH_MAX + 1, 0);
     }
     
-    //----------------------------------------------------------------------
     
     /**
-     * @param int $width
-     * @param array<array<int|string>> $frame
-     * @param int $mask
-     * @param int $level
+     * @param int                      $width
+     * @param array<array<int|string>> $frame ?
+     * @param int                      $mask
+     * @param int                      $level
      * @return int
      */
-    protected function writeFormatInformation(int $width, &$frame, $mask, $level):int
+    private function writeFormatInformation(int $width, array &$frame, int $mask, int $level):int
     {
         $blacks = 0;
         $format = QRspec::getFormatInfo($mask, $level);
@@ -104,7 +109,6 @@ class QRmask
         return $blacks;
     }
     
-    //----------------------------------------------------------------------
     public function mask0($x, $y)
     {
         return ($x + $y) & 1;
@@ -112,12 +116,12 @@ class QRmask
     
     public function mask1($x, $y)
     {
-        return ($y & 1);
+        return $y & 1;
     }
     
     public function mask2($x, $y)
     {
-        return ($x%3);
+        return $x%3;
     }
     
     public function mask3($x, $y)
@@ -145,13 +149,12 @@ class QRmask
         return ((($x*$y)%3) + (($x + $y) & 1)) & 1;
     }
     
-    //----------------------------------------------------------------------
     
     /**
      * @param int $maskNo
      * @param int $width
-     * @param array<array<int>> $frame
-     * @return array<array<int>>
+     * @param array<string> $frame
+     * @return array<array<int>> [ [ 0,0,0,0,0...], [0,1,0,0,1,1...]...]
      */
     private function generateMaskNo(int $maskNo,int $width,array $frame):array
     {
@@ -177,13 +180,12 @@ class QRmask
         return $bitMask;
     }
     
-    //----------------------------------------------------------------------
     
     /**
-     * @param array<array<int>> $bitFrame
+     * @param array<array<int>> $bitFrame todo check ?
      * @return false|string
      */
-    public static function serial(array $bitFrame)
+    private static function serial(array $bitFrame)
     {
         $codeArr = [];
         
@@ -193,13 +195,12 @@ class QRmask
         return gzcompress(join("\n", $codeArr), 9);
     }
     
-    //----------------------------------------------------------------------
     
     /**
      * @param string $code
      * @return array<array<string>>
      */
-    public static function unserial(string $code):array
+    private static function unserial(string $code):array
     {
         $codeArr = [];
         
@@ -210,17 +211,16 @@ class QRmask
         return $codeArr;
     }
     
-    //----------------------------------------------------------------------
     
     /**
      * @param int $maskNo
      * @param int $width
      * @param $s
-     * @param array $d
+     * @param array $d todo check ?
      * @param bool $maskGenOnly
      * @return int|void
      */
-    public function makeMaskNo($maskNo, $width, $s, &$d, $maskGenOnly = false)
+    public function makeMaskNo(int $maskNo, int $width, $s, array &$d, bool $maskGenOnly = false)
     {
         $b       = 0;
         $bitMask = [];
@@ -266,16 +266,15 @@ class QRmask
         return $b;
     }
     
-    //----------------------------------------------------------------------
     
     /**
      * @param int $width
-     * @param $frame
-     * @param $maskNo
-     * @param $level
-     * @return array<array<int>>
+     * @param array<string> $frame todo check null ?
+     * @param int $maskNo
+     * @param int $level
+     * @return array<string>
      */
-    public function makeMask(int $width, $frame, $maskNo, $level):array
+    public function makeMask(int $width, array $frame, int $maskNo, int $level):array
     {
         $masked = array_fill(0, $width, str_repeat("\0", $width));
         $this->makeMaskNo($maskNo, $width, $frame, $masked);
@@ -284,8 +283,7 @@ class QRmask
         return $masked;
     }
     
-    //----------------------------------------------------------------------
-    public function calcN1N3($length)
+    private function calcN1N3(int $length):int
     {
         $demerit = 0;
         
@@ -321,10 +319,13 @@ class QRmask
         return $demerit;
     }
     
-    //----------------------------------------------------------------------
-    public function evaluateSymbol($width, $frame)
+    /**
+     * @param int   $width
+     * @param array<string> $frame
+     * @return int
+     */
+    private function evaluateSymbol(int $width, array $frame):int
     {
-        $head    = 0;
         $demerit = 0;
         
         for($y = 0; $y < $width; $y++)
@@ -406,15 +407,13 @@ class QRmask
     }
     
     
-    //----------------------------------------------------------------------
-    
     /**
      * @param int $width
-     * @param $frame
+     * @param array<string> $frame todo check null ?
      * @param int $level
-     * @return array|mixed
+     * @return array<string>
      */
-    public function mask($width, $frame, $level)
+    public function mask(int $width, array $frame, int $level):array
     {
         $minDemerit  = PHP_INT_MAX;
         $bestMaskNum = 0;
@@ -459,6 +458,4 @@ class QRmask
         
         return $bestMask;
     }
-    
-    //----------------------------------------------------------------------
 }

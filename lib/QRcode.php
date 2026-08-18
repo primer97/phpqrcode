@@ -3,16 +3,28 @@
 namespace primer\phpqrcode;
 
 use Exception;
+use primer\phpqrcode\Internal\FrameFiller;
+use primer\phpqrcode\Internal\QRencode;
+use primer\phpqrcode\Internal\QRinput;
+use primer\phpqrcode\Internal\QRmask;
+use primer\phpqrcode\Internal\QRrawcode;
+use primer\phpqrcode\Internal\QRspec;
+use primer\phpqrcode\Internal\QRsplit;
 
 class QRcode
 {
-    /** @var int $version */
-    public $version;
-    public $width;
-    public $data;
+    public int $version;
+    public int $width;
+    /** @var array<string> $data */
+    public array $data;
     
-    //----------------------------------------------------------------------
-    public function encodeMask(QRinput $input, $mask)
+    /**
+     * @param QRinput $input
+     * @param int     $maskNo
+     * @return $this|null --todo null possible ?
+     * @throws Exception
+     */
+    public function encodeMask(QRinput $input, int $maskNo):?self
     {
         if($input->getVersion() < 0 || $input->getVersion() > QRConstants::QRSPEC_VERSION_MAX)
         {
@@ -30,7 +42,7 @@ class QRcode
         $frame   = QRspec::newFrame($version);
         
         $filler = new FrameFiller($width, $frame);
-        if(is_null($filler))
+        if(is_null($filler)) //todo check possible case ?
         {
             return null;
         }
@@ -64,7 +76,7 @@ class QRcode
         
         // masking
         $maskObj = new QRmask();
-        if($mask < 0)
+        if($maskNo < 0)
         {
             
             if(QRSettings::$FindBestMask)
@@ -78,10 +90,10 @@ class QRcode
         }
         else
         {
-            $masked = $maskObj->makeMask($width, $frame, $mask, $input->getErrorCorrectionLevel());
+            $masked = $maskObj->makeMask($width, $frame, $maskNo, $input->getErrorCorrectionLevel());
         }
         
-        if($masked == null)
+        if(is_null($masked)) // possible ? todo check
         {
             return null;
         }
@@ -95,10 +107,10 @@ class QRcode
     
     /**
      * @param QRinput $input
-     * @return $this|null
+     * @return $this|null --todo null possible ?
      * @throws Exception
      */
-    public function encodeInput(QRinput $input)
+    public function encodeInput(QRinput $input):?self
     {
         return $this->encodeMask($input, -1);
     }
@@ -110,15 +122,14 @@ class QRcode
      * @return $this|null
      * @throws Exception
      */
-    public function encodeString8bit(?string $string, int $version, int $level)
+    public function encodeString8bit(?string $string, int $version, int $level):?self
     {
-        if($string == null)
+        if(is_null($string))
         {
             throw new Exception('empty string!');
         }
         
         $input = new QRinput($version, $level);
-        if($input == null) return null;
         
         $ret = $input->append( QRConstants::QR_MODE_8, strlen($string),str_split($string));
         if($ret < 0)
@@ -138,7 +149,7 @@ class QRcode
      * @return $this|null
      * @throws Exception
      */
-    public function encodeString($string, int $version, int $level, int $hint, bool $casesensitive)
+    public function encodeString($string, int $version, int $level, int $hint, bool $casesensitive):?self
     {
         
         if($hint != QRConstants::QR_MODE_8 && $hint != QRConstants::QR_MODE_KANJI)
@@ -147,10 +158,9 @@ class QRcode
         }
         
         $input = new QRinput($version, $level);
-        if($input == null) return null;
         
         $ret = QRsplit::splitStringToQRinput($string, $input, $hint, $casesensitive);
-        if($ret < 0)
+        if($ret < 0) // todo check possible case ?
         {
             return null;
         }
@@ -162,7 +172,7 @@ class QRcode
     
     /**
      * @param string  $text          Text data to encode
-     * @param ?string $outfile       Png file to create, (can be null when false when sendToBrowser==true)
+     * @param ?string $outfile       Png file to create, (when null, no file written but sent to browser)
      * @param int     $level         Correction level {@see QRConstants::QR_ECLEVEL_L}, {@see QRConstants::QR_ECLEVEL_M}, {@see QRConstants::QR_ECLEVEL_Q}, {@see QRConstants::QR_ECLEVEL_H}
      * @param int     $size          Pixel size
      * @param int     $margin        Margin (silent zone)
@@ -176,16 +186,31 @@ class QRcode
     }
     
     //----------------------------------------------------------------------
-    public static function text($text, $outfile = false, $level = QRConstants::QR_ECLEVEL_L, $size = 3, $margin = 4)
+    public static function text($text, ?string $outfile = null, int $level = QRConstants::QR_ECLEVEL_L, int $size = 3, int $margin = 4)
     {
         $enc = QRencode::factory($level, $size, $margin);
         return $enc->encode($text, $outfile);
     }
     
     //----------------------------------------------------------------------
-    public static function raw($text, $outfile = false, $level = QRConstants::QR_ECLEVEL_L, $size = 3, $margin = 4)
+    public static function raw(string $text, ?string $outfile = null, int $level = QRConstants::QR_ECLEVEL_L, int $size = 3, int $margin = 4):array
     {
         $enc = QRencode::factory($level, $size, $margin);
-        return $enc->encodeRAW($text, $outfile);
+        return $enc->encodeRAW($text);
+    }
+    
+    /**
+     * @param string  $text    Text data to encode
+     * @param ?string $outfile Png file to create, (can be null when false when sendToBrowser==true)
+     * @param int     $level   Correction level {@see QRConstants::QR_ECLEVEL_L}, {@see QRConstants::QR_ECLEVEL_M}, {@see QRConstants::QR_ECLEVEL_Q}, {@see QRConstants::QR_ECLEVEL_H}
+     * @param int     $size    Pixel size
+     * @param int     $margin  Margin (silent zone)
+     * @param int     $qual    jpeg quality (higher is better, max 100)
+     * @return void
+     */
+    public static function jpg(string $text, ?string $outfile = null, int $level = QRConstants::QR_ECLEVEL_L, int $size = 5, int $margin = 5, int $qual=85):void
+    {
+        $enc = QRencode::factory($level, $size, $margin);
+        $enc->encodeJPG($text, $outfile, min(max($qual,0),100));
     }
 }

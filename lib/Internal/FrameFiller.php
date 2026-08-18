@@ -1,17 +1,20 @@
 <?php
 
-namespace primer\phpqrcode;
+namespace primer\phpqrcode\Internal;
 
+/**
+ * @internal
+ */
 class FrameFiller
 {
     
-    public $width;
+    public int $width;
     /** @var array<string> $frame [y⇒[line]] */
-    public $frame;
-    public $x;
-    public $y;
-    public $dir;
-    public $bit;
+    public array $frame;
+    public int $x;
+    public int $y;
+    public int $dir;
+    public int $bit;
     
     /**
      * @param int $width
@@ -51,7 +54,7 @@ class FrameFiller
     /**
      * @return array{'x':int,'y':int}|null Next position
      */
-    public function next()
+    public function next():?array
     {
         do
         {

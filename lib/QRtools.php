@@ -25,15 +25,15 @@
 namespace primer\phpqrcode;
 
 
+use primer\phpqrcode\Internal\QRmask;
+use primer\phpqrcode\Internal\QRspec;
+
 class QRtools
 {
     
-    //----------------------------------------------------------------------
-    protected static /*array*/ $frames=[]; //todo  no usage ?
-    
     /**
-     * @param array<array<string>> $frame
-     * @return array<array<string>>
+     * @param array<string> $frame
+     * @return array<string>
      */
     public static function binarize(array $frame):array
     {
@@ -65,7 +65,7 @@ class QRtools
             $eccLevel = $mode[1];
         }
         
-        $qrTab = QRcode::text($code, false, $eccLevel);
+        $qrTab = QRcode::text($code, null, $eccLevel);
         $size  = count($qrTab);
         
         $barcode_array['num_rows'] = $size;
@@ -86,7 +86,7 @@ class QRtools
     //----------------------------------------------------------------------
     public static function clearCache():void
     {
-        self::$frames = [];
+//        self::$frames = [];
     }
     
     //----------------------------------------------------------------------

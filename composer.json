@@ -1,6 +1,6 @@
 {
   "name": "primer/phpqrcode",
-  "version": "1.2.2",
+  "version": "1.4.0",
   "description": "A modern implementaion of QR code 2D barcode generator. Pure-php LGPL implementation based on https://phpqrcode.sourceforge.net, itself based on C libqrencode by Kentaro Fukuchi.",
   "minimum-stability": "stable",
   "type": "library",
@@ -14,8 +14,12 @@
       "homepage": "https://github.com/primer97"
     }
   ],
+  "support": {
+    "issues": "https://github.com/primer97/phpqrcode/issues",
+    "source": "https://github.com/primer97/phpqrcode"
+  },
   "require": {
-    "php": ">=7.3",
+    "php": ">=7.4",
     "ext-gd": "*",
     "ext-zlib": "*"
   },
@@ -30,9 +34,15 @@
     }
   },
   "require-dev": {
-    "phpunit/phpunit": "~8.5.0",
+    "phpunit/phpunit": "^8.5",
+    "php-mock/php-mock-phpunit": "^2.15",
     "thiagolp90/qr-reader": "~1",
     "phpstan/phpstan": "^2.2",
-    "php-mock/php-mock-phpunit": "^2.15"
+    "nunomaduro/phpinsights": "^2.5"
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
   }
 }

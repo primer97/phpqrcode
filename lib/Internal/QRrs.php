@@ -1,14 +1,16 @@
 <?php
 
-namespace primer\phpqrcode;
+namespace primer\phpqrcode\Internal;
 
+/**
+ * @internal
+ */
 class QRrs
 {
+    /** @var array<?QRrsItem> $items  */
+    public static array $items = [];
     
-    public static $items = [];
-    
-    //----------------------------------------------------------------------
-    public static function init_rs($symsize, $gfpoly, $fcr, $prim, $nroots, $pad)
+    public static function init_rs(int $symsize, int $gfpoly, int $fcr, int $prim, int $nroots, int $pad):?QRrsItem
     {
         foreach(self::$items as $rs)
         {

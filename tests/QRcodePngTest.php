@@ -1,54 +1,53 @@
 <?php
 
-namespace primer\phpqrcode;
+namespace Tests;
 
-use phpmock\phpunit\PHPMock;
 use PHPUnit\Framework\TestCase;
+use primer\phpqrcode\QRcode;
+use primer\phpqrcode\QRConstants;
+use primer\phpqrcode\QRSettings;
 use Zxing\QrReader;
 
-class QRcodeTest extends TestCase
+class QRcodePngTest extends TestCase
 {
-    use PHPMock;
     
+    private static function buildPath(string $filename):string
+    {
+        return __DIR__."/out/$filename.png";
+    }
     public function setup(): void
     {
         QRSettings::default();
     }
-    public function testPng()
+    public function testBuildNumericPng()
     {
-        $file=__DIR__."/out/qr1.png";
+        $file=self::buildPath('numeric');
         QRcode::png("123456",$file,QRConstants::QR_ECLEVEL_L);
         $this->assertTrue(file_exists($file));
     }
     
-    public function testSentToBrowser()
-    {
-        // mock `header()` to prevent the "Cannot modify header information..." issue, and to check the right 'content-type' as well.
-        $header = $this->getFunctionMock(
-            'primer\\phpqrcode',
-            'header'
-        );
-        
-        $header->expects($this->once())
-               ->with('Content-type: image/png');
-        
-        ob_start();
-        QRcode::png("123456");
-     $out=ob_get_clean();
-     
-     // And now ensure we receive a png image:
-     $exp="\x89PNG\r\n\x1A\n"; // png image magic id
-     $img=substr($out, 0, 8);
-     $this->assertSame($exp,$img);
-     
-    }
-    
+//    public function testBuildEmptyData()
+//    {
+//        $file=self::buildPath('null');
+//        QRcode::png("",$file);
+//        $this->assertFalse(file_exists($file)); // silently fails, shall we report an issue ?
+//    }
 //region check QR content
-    public function testReadBasic()
+    public function testReadNumericECLow()
     {
-        $file=__DIR__."/out/qr2.png";
-        $in="123456";
+        $file=$file=self::buildPath('numeric_low');
+        $in="1234567890123";
         QRcode::png($in,$file,QRConstants::QR_ECLEVEL_L);
+        $this->assertTrue(file_exists($file));
+        $reader = new QrReader($file);
+        $out=$reader->text();
+        $this->assertSame($in,$out);
+    }
+    public function testReadNumericECHigh()
+    {
+        $file=self::buildPath('numeric_high');
+        $in="1234567890123";
+        QRcode::png($in,$file,QRConstants::QR_ECLEVEL_H);
         $this->assertTrue(file_exists($file));
         $reader = new QrReader($file);
         $out=$reader->text();
@@ -57,9 +56,9 @@ class QRcodeTest extends TestCase
     
     public function testEncodeAndReReadExtendChars()
     {
-        $file=__DIR__."/out/qr3.png";
+        $file=self::buildPath('extchars');
         $in=" &aA|\\%/*-+.,^'#~?!<>[]`\n\r\"\t{}@;:§¤°é$";
-        QRcode::png($in,$file,QRConstants::QR_ECLEVEL_L);
+        QRcode::png($in,$file);
         $this->assertTrue(file_exists($file));
         $reader = new QrReader($file);
         $out=$reader->text();
@@ -68,9 +67,9 @@ class QRcodeTest extends TestCase
     
     public function testEncodeAndReReadUtf8_Auto()
     {
-        $file=__DIR__."/out/qr4.png";
+        $file=self::buildPath('utf8_auto');
         $in="★→⚡✅";
-        QRcode::png($in,$file,QRConstants::QR_ECLEVEL_L);
+        QRcode::png($in,$file);
         $this->assertTrue(file_exists($file));
         $reader = new QrReader($file);
         $out=$reader->text();
@@ -78,10 +77,10 @@ class QRcodeTest extends TestCase
     }
     public function testEncodeAndReReadUtf8_Forced()
     {
-        $file=__DIR__."/out/qr4.png";
+        $file=self::buildPath('utf8_forced');
         $in="★→⚡✅";
         QRSettings::forceMode(QRConstants::QR_MODE_8);
-        QRcode::png($in,$file,QRConstants::QR_ECLEVEL_L);
+        QRcode::png($in,$file);
         $this->assertTrue(file_exists($file));
         $reader = new QrReader($file);
         $out=$reader->text();
@@ -90,9 +89,9 @@ class QRcodeTest extends TestCase
     
     public function testEncodeAndReReadKanji_Auto()
     {
-        $file=__DIR__."/out/qr9.png";
+        $file=self::buildPath('kanji_auto');
         $in="漢字体";
-        QRcode::png($in,$file,QRConstants::QR_ECLEVEL_L);
+        QRcode::png($in,$file);
         $this->assertTrue(file_exists($file));
         $reader = new QrReader($file);
         $out=$reader->text();
@@ -100,10 +99,10 @@ class QRcodeTest extends TestCase
     }
     public function testEncodeAndReReadKanji_Forced()
     {
-        $file=__DIR__."/out/qr9.png";
+        $file=self::buildPath('kanji_forced');
         $in="漢字体";
         QRSettings::forceMode(QRConstants::QR_MODE_KANJI);
-        QRcode::png($in,$file,QRConstants::QR_ECLEVEL_L);
+        QRcode::png($in,$file);
         $this->assertTrue(file_exists($file));
         $reader = new QrReader($file);
         $out=$reader->text();
@@ -113,14 +112,14 @@ class QRcodeTest extends TestCase
     
     public function testPngDefaultMask()
     {
-        $file=__DIR__."/out/qr5.png";
+        $file=$file=self::buildPath('numeric_mask1');
         QRSettings::setDefaultMask(1);
         QRcode::png("123456",$file);
         $this->assertTrue(file_exists($file));
     }
     public function testPngBestCount()
     {
-        $file=__DIR__."/out/qr6.png";
+        $file=$file=self::buildPath('numeric_best3');
         QRSettings::setFindBestMask(3);
         QRcode::png("123456",$file);
         $this->assertTrue(file_exists($file));

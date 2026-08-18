@@ -25,25 +25,33 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-namespace primer\phpqrcode;
+namespace primer\phpqrcode\Internal;
 
 
 use Exception;
+use primer\phpqrcode\QRcode;
+use primer\phpqrcode\QRConstants;
+use primer\phpqrcode\QRimage;
+use primer\phpqrcode\QRSettings;
+use primer\phpqrcode\QRtools;
 
+/**
+ * @internal
+ */
 class QRencode
 {
     
-    public $casesensitive = true;
+    public bool $casesensitive = true; //todo create a settings ?
     
-    public $version = 0;
-    public $size    = 3;
-    public $margin  = 4;
+    public int $version = 0;
+    public int $size    = 3;
+    public int $margin  = 4;
     
     /** @var int $level error correction level 0 to 3 */
-    public $level = QRConstants::QR_ECLEVEL_L;
-    public $hint  = QRConstants::QR_MODE_8;
+    public int $level = QRConstants::QR_ECLEVEL_L;
+    public int $hint  = QRConstants::QR_MODE_8;
     
-    protected function isEightBit():bool
+    private function isEightBit():bool
     {
         return QRSettings::isForcedMode() &&
             ( QRSettings::getForcedMode() == QRConstants::QR_MODE_8
@@ -78,8 +86,10 @@ class QRencode
         return $enc;
     }
     
-    //----------------------------------------------------------------------
-    public function encodeRAW($intext, $outfile = false)
+    /**
+     * @throws Exception
+     */
+    public function encodeRAW(string $intext):array
     {
         $code = new QRcode();
         
@@ -92,16 +102,16 @@ class QRencode
             $code->encodeString($intext, $this->version, $this->level, $this->hint, $this->casesensitive);
         }
         
-        return $code->data;
+        return $code->data; //todo build a getter
     }
     
     /**
      * @param string $intext
-     * @param bool   $outfile
-     * @return mixed|void
+     * @param ?string   $outfile
+     * @return array<string>|void
      * @throws Exception
      */
-    public function encode(string $intext, bool $outfile = false)
+    public function encode(string $intext, ?string $outfile = null) //void|array
     {
         $code = new QRcode();
         
@@ -114,7 +124,7 @@ class QRencode
             $code->encodeString($intext, $this->version, $this->level, $this->hint, $this->casesensitive);
         }
         
-        if($outfile !== false)
+        if(!is_null($outfile))
         {
             file_put_contents($outfile, join("\n", QRtools::binarize($code->data)));
         }
@@ -124,7 +134,16 @@ class QRencode
         }
     }
     
-    //----------------------------------------------------------------------
+    /**
+     * @param array<string> $tab
+     * @return int
+     */
+    private function getRealPointSize(array $tab):int
+    {
+        $maxSize = (int)(QRConstants::QR_PNG_MAXIMUM_SIZE/(count($tab) + 2*$this->margin));
+        return min(max(1, $this->size), $maxSize);
+    }
+
     public function encodePNG(string $intext, ?string $outfile = null, bool $sendToBrowser = false):void
     {
         try
@@ -138,9 +157,7 @@ class QRencode
             if($err != '')
                 QRtools::log($outfile, $err);
             
-            $maxSize = (int)(QRConstants::QR_PNG_MAXIMUM_SIZE/(count($tab) + 2*$this->margin));
-            
-            QRimage::png($tab, $outfile, min(max(1, $this->size), $maxSize), $this->margin, $sendToBrowser);
+            QRimage::png($tab, $outfile, $this->getRealPointSize($tab), $this->margin, $sendToBrowser);
             
         } catch(Exception $e)
         {
@@ -149,4 +166,27 @@ class QRencode
             
         }
     }
+    
+    public function encodeJPG(string $intext, ?string $outfile = null, int $jpgQual=85):void
+    {
+        try
+        {
+            
+            ob_start();
+            $tab = $this->encode($intext); //todo it may raise an Exception here (empty string) then ob_end_clean() is not proceeded. we have to fix that.
+            $err = ob_get_contents();
+            ob_end_clean();
+            
+            if($err != '')
+                QRtools::log($outfile, $err);
+            
+            QRimage::jpg($tab, $outfile, $this->getRealPointSize($tab), $this->margin,$jpgQual);
+        } catch(Exception $e)
+        {
+            
+            QRtools::log($outfile, $e->getMessage());
+            
+        }
+    }
+    
 }

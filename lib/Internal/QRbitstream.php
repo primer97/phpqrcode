@@ -25,27 +25,27 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-namespace primer\phpqrcode;
+namespace primer\phpqrcode\Internal;
+
+/**
+ * @internal
+ */
 class QRbitstream
 {
     /** @var array<int> $data  */
-    protected $data = [];
+    protected array $data = [];
     
-    //----------------------------------------------------------------------
     public function size():int
     {
         return count($this->data);
     }
     
-    //----------------------------------------------------------------------
-    public function allocate(int $setLength):int
+    private function allocate(int $setLength):void
     {
         $this->data = array_fill(0, $setLength, 0);
-        return 0;
     }
     
-    //----------------------------------------------------------------------
-    public static function newFromNum(int $bits, $num):QRbitstream
+    private static function newFromNum(int $bits, int $num):QRbitstream
     {
         $bstream = new QRbitstream();
         $bstream->allocate($bits);
@@ -73,7 +73,7 @@ class QRbitstream
      * @param array<int> $data
      * @return QRbitstream
      */
-    public static function newFromBytes(int $size, array $data):QRbitstream
+    private static function newFromBytes(int $size, array $data):QRbitstream
     {
         $bstream = new QRbitstream();
         $bstream->allocate($size*8);
@@ -103,7 +103,7 @@ class QRbitstream
     
     /**
      * @param QRbitstream|null $arg -- todo check if null possible ?
-     * @return int
+     * @return int -1 on error, 0 otherwise
      */
     public function append(?QRbitstream $arg):int
     {
@@ -128,17 +128,12 @@ class QRbitstream
         return 0;
     }
     
-    //----------------------------------------------------------------------
     public function appendNum(int $bits, int $num):int
     {
         if($bits == 0)
             return 0;
         
         $b = QRbitstream::newFromNum($bits, $num);
-        
-//        if(is_null($b)) can't be null
-//            return -1;
-        assert( !is_null($b)); //todo check if we need that assertion ?
         
         $ret = $this->append($b);
         unset($b);
@@ -158,10 +153,6 @@ class QRbitstream
             return 0;
         
         $b = QRbitstream::newFromBytes($size, $data);
-        
-//        if(is_null($b)) can't be null
-//            return -1;
-        assert( !is_null($b)); //todo check if we need that assertion ?
         
         $ret = $this->append($b);
         unset($b);

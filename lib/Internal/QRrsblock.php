@@ -1,17 +1,21 @@
 <?php
 
-namespace primer\phpqrcode;
+namespace primer\phpqrcode\Internal;
 
+/**
+ * @internal
+ */
 class QRrsblock
 {
-    /** @var int $dataLength */
-    public $dataLength;
+    public int $dataLength;
+    
     /** @var array<int> $data */
-    public $data = [];
-    /** @var int $eccLength */
-    public $eccLength;
+    public array $data = [];
+    
+    public int $eccLength;
+    
     /** @var array<int> $ecc */
-    public $ecc  = [];
+    public array $ecc  = [];
     
     /**
      * @param int        $dl
