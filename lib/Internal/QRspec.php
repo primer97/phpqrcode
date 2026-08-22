@@ -35,6 +35,7 @@ namespace primer\phpqrcode\Internal;
 
 
 use primer\phpqrcode\QRConstants;
+use primer\phpqrcode\QRSettings;
 
 /**
  * @internal
@@ -641,11 +642,9 @@ class QRspec
 
         if(!isset(self::$frames[$version]))
         {
-
-            $fileName = QRConstants::QR_CACHE_DIR.'frame_'.$version.'.dat';
-
-            if(QRConstants::QR_CACHEABLE)
+            if(QRSettings::isCacheActive())
             {
+                $fileName = QRSettings::getCacheDir().'frame_'.$version.'.dat';
                 if(file_exists($fileName))
                 {
                     self::$frames[$version] = self::unserial(file_get_contents($fileName));

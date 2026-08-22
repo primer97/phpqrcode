@@ -9,9 +9,6 @@ namespace primer\phpqrcode;
 
 class QRConstants
 {
-    public const QR_CACHEABLE = false; // cache activated
-    public const QR_CACHE_DIR = ''; // dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR;
-    
     public const QR_PNG_MAXIMUM_SIZE = 1024; // maximum allowed png image width (in pixels), tune to make sure GD and PHP can handle such big images
     
     // Encoding modes
@@ -27,8 +24,6 @@ class QRConstants
     public const QR_ECLEVEL_M = 1;
     public const QR_ECLEVEL_Q = 2;
     public const QR_ECLEVEL_H = 3;
-    
-    public const QR_IMAGE = true;
     
     public const STRUCTURE_HEADER_BITS  = 20;
     public const MAX_STRUCTURED_SYMBOLS = 16;

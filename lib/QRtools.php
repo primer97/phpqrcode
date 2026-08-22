@@ -25,6 +25,7 @@
 namespace primer\phpqrcode;
 
 
+use Exception;
 use primer\phpqrcode\Internal\QRmask;
 use primer\phpqrcode\Internal\QRspec;
 
@@ -90,17 +91,30 @@ class QRtools
     }
     
     //----------------------------------------------------------------------
+    
+    /**
+     * Build cache.
+     * @return void
+     * @throws Exception
+     */
     public static function buildCache():void
     {
+        if(!QRSettings::isCacheActive())
+        {
+            throw new Exception('Cache is not active, initiate QRSettings::allowCache() first');
+        }
+        $dir= QRSettings::getCacheDir();
+        if(!is_dir($dir) || !is_readable($dir) || !is_writable($dir))
+        {
+            throw new Exception("Cache folder does not exists, or may be not writable :".$dir);
+        }
+        
         $mask = new QRmask();
         for($a = 1; $a <= QRConstants::QRSPEC_VERSION_MAX; $a++)
         {
             $frame = QRspec::newFrame($a);
-            if(QRConstants::QR_IMAGE)
-            {
-                $fileName = QRConstants::QR_CACHE_DIR.'frame_'.$a.'.png';
-                QRimage::png(self::binarize($frame), $fileName, 1, 0);
-            }
+            $fileName = $dir.'frame_'.$a.'.png';
+            QRimage::png(self::binarize($frame), $fileName, 1, 0);
             
             $width   = count($frame);
             $bitMask = array_fill(0, $width, array_fill(0, $width, 0));

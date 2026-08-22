@@ -225,10 +225,10 @@ class QRmask
         $b       = 0;
         $bitMask = [];
         
-        $fileName = QRConstants::QR_CACHE_DIR.'mask_'.$maskNo.DIRECTORY_SEPARATOR.'mask_'.$width.'_'.$maskNo.'.dat';
         
-        if(QRConstants::QR_CACHEABLE)
+        if(QRSettings::isCacheActive())
         {
+            $fileName = QRSettings::getCacheDir().'mask_'.$maskNo.DIRECTORY_SEPARATOR.'mask_'.$width.'_'.$maskNo.'.dat';
             if(file_exists($fileName))
             {
                 $bitMask = self::unserial(file_get_contents($fileName));
@@ -236,8 +236,8 @@ class QRmask
             else
             {
                 $bitMask = $this->generateMaskNo($maskNo, $width, $s);
-                if(!file_exists(QRConstants::QR_CACHE_DIR.'mask_'.$maskNo))
-                    mkdir(QRConstants::QR_CACHE_DIR.'mask_'.$maskNo);
+                if(!file_exists(QRSettings::getCacheDir().'mask_'.$maskNo))
+                    mkdir(QRSettings::getCacheDir().'mask_'.$maskNo);
                 file_put_contents($fileName, self::serial($bitMask));
             }
         }
